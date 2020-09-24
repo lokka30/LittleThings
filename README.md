@@ -5,4 +5,4 @@ LittleThings is a [SpigotMC](https://www.spigotmc.org/) plugin that adds configu
 [Click here]() to visit the SpigotMC resource page for LittleThings where much more information is presented. :)
 
 # License
-Licensed under AGPL v3.0, see [LICENSE.md]().
+Licensed under [GNU AGPL v3.0](https://github.com/lokka30/LittleThings/blob/master/src/main/resources/license.txt).
