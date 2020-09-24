@@ -1,0 +1,25 @@
+# For configuration changes to take effect, ensure you have saved this file, then restart your server.
+
+armor-stand:
+  # Should armor stands spawn with arms?
+  arms: false
+
+  # Should armor stands spawn with a base plate?
+  base-plate: true
+
+explosions:
+  # Should explosions not destroy any blocks? (Will still hurt entities!)
+  no-block-damage: false
+
+fire:
+  # Should fires not spread?
+  no-spread: false
+
+leaves:
+  # Should leaves not decay?
+  prevent-decay: false
+
+# Which entity types should spawn with no AI?
+# Helps with server performance.
+# You may want to consider adding SQUID, COD, SALMON, PUFFERFISH, TROPICAL_FISH and BAT.
+no-ai: []

@@ -1,0 +1,8 @@
+name: ${project.name}
+version: ${project.version}
+author: lokka30
+main: me.lokka30.littlethings.LittleThings
+website: 'https://www.spigotmc.org/'
+api-version: '1.13'
+load: STARTUP
+description: ${project.description}
