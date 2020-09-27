@@ -2,10 +2,7 @@ package me.lokka30.littlethings;
 
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Material;
-import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockExplodeEvent;
@@ -13,6 +10,7 @@ import org.bukkit.event.block.BlockSpreadEvent;
 import org.bukkit.event.block.LeavesDecayEvent;
 import org.bukkit.event.entity.EntityCombustEvent;
 import org.bukkit.event.entity.EntitySpawnEvent;
+import org.bukkit.event.entity.EntityTeleportEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -23,23 +21,28 @@ public class LittleThings extends JavaPlugin implements Listener {
 
     @Override
     public void onEnable() {
-        // Ensure config.yml is generated.
-        saveDefaultConfig();
+        // Generate files if they don't exist.
+        saveIfNotExists("config.yml");
+        saveIfNotExists("license.txt");
+        if (getConfig().getInt("file-version") != 2) {
+            getLogger().warning("Your config.yml file is not the correct version (outdated?). Reset the file or merge your current file, else it is very likely that you will experience errors. Please read the update changelogs!");
+        }
 
         // Register events.
         getServer().getPluginManager().registerEvents(this, this);
 
         // Register metrics.
         new Metrics(this, 8934);
+    }
 
-        // Ensure license.txt is created.
-        if (!(new File(getDataFolder(), "license.txt").exists())) {
-            saveResource("license.txt", false);
+    private void saveIfNotExists(String fileName) {
+        if (!(new File(getDataFolder(), fileName).exists())) {
+            saveResource(fileName, false);
         }
     }
 
     private boolean isEnabledInList(String item, String configPath) {
-        if (getConfig().getBoolean(configPath + ".all-worlds")) {
+        if (getConfig().getBoolean(configPath + ".all")) {
             return true;
         } else {
             List<String> list = getConfig().getStringList(configPath + ".list");
@@ -107,6 +110,13 @@ public class LittleThings extends JavaPlugin implements Listener {
             if (isEnabledInList(event.getEntityType().toString(), "stop-daylight-combustion.entities") && isEnabledInList(event.getEntity().getWorld().getName(), "stop-daylight-combustion.worlds")) {
                 event.setCancelled(true);
             }
+        }
+    }
+
+    @EventHandler
+    public void onTeleport(final EntityTeleportEvent event) {
+        if (event.getEntity() instanceof Piglin && getConfig().getBoolean("stop-piglin-overworld-zombification.enabled")) {
+            ((Piglin) event.getEntity()).setImmuneToZombification(isEnabledInList(Objects.requireNonNull(Objects.requireNonNull(event.getTo()).getWorld()).getName(), "stop-piglin-overworld-zombification.worlds"));
         }
     }
 }

@@ -7,7 +7,7 @@ modify-armor-stands:
     arms: false
     base-plate: true
   worlds:
-    all-worlds: true # true = ignore worlds list below
+    all: true # true = ignore worlds list below
     mode: WHITELIST
     list: ['world', 'world_nether', 'world_the_end']
 
@@ -15,7 +15,7 @@ modify-armor-stands:
 stop-explosions-block-damage:
   enabled: true
   worlds:
-    all-worlds: true # true = ignore worlds list below
+    all: true # true = ignore worlds list below
     mode: WHITELIST
     list: ['world', 'world_nether', 'world_the_end']
 
@@ -23,7 +23,7 @@ stop-explosions-block-damage:
 stop-fire-spread:
   enabled: false
   worlds:
-    all-worlds: true # true = ignore worlds list below
+    all: true # true = ignore worlds list below
     mode: WHITELIST
     list: ['world', 'world_nether', 'world_the_end']
 
@@ -31,7 +31,7 @@ stop-fire-spread:
 stop-leaf-decay:
   enabled: false
   worlds:
-    all-worlds: true # true = ignore worlds list below
+    all: true # true = ignore worlds list below
     mode: WHITELIST
     list: ['world', 'world_nether', 'world_the_end']
 
@@ -40,16 +40,16 @@ stop-leaf-decay:
 no-mob-ai:
   enabled: false
   entities:
-    all-entities: false # true = ignore entities list below
+    all: false # true = ignore entities list below
     mode: WHITELIST
     list: [SQUID, COD, SALMON, PUFFERFISH, TROPICAL_FISH, BAT]
   worlds:
-    all-worlds: true # true = ignore worlds list below
+    all: true # true = ignore worlds list below
     mode: WHITELIST
     list: ['world', 'world_nether', 'world_the_end']
 
 
-# Prevent mobs from burning in daylight.
+# Stop mobs from burning in daylight.
 stop-daylight-combustion:
   enabled: false
   entities:
@@ -57,6 +57,18 @@ stop-daylight-combustion:
     mode: WHITELIST
     list: [ZOMBIE, SKELETON, PHANTOM]
   worlds:
-    all-worlds: true # true = ignore worlds list below
+    all: true # true = ignore worlds list below
     mode: WHITELIST
     list: ['world', 'world_nether', 'world_the_end']
+
+# In 1.16+, when piglins teleport to the overworld, they become zombified.
+# This feature allows you to stop this from happening.
+stop-piglin-overworld-zombification:
+  enabled: false
+  worlds:
+    all: true # true = ignore worlds list below
+    mode: WHITELIST
+    list: ['world', 'world_nether', 'world_the_end']
+
+# Do not change this unless you know what you are doing.
+file-version: 2
