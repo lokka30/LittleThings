@@ -11,11 +11,13 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.block.BlockSpreadEvent;
 import org.bukkit.event.block.LeavesDecayEvent;
-import org.bukkit.event.entity.EntityExplodeEvent;
+import org.bukkit.event.entity.EntityCombustEvent;
 import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
+import java.util.List;
+import java.util.Objects;
 
 public class LittleThings extends JavaPlugin implements Listener {
 
@@ -31,8 +33,26 @@ public class LittleThings extends JavaPlugin implements Listener {
         new Metrics(this, 8934);
 
         // Ensure license.txt is created.
-        if(!(new File(getDataFolder(), "license.txt").exists())) {
+        if (!(new File(getDataFolder(), "license.txt").exists())) {
             saveResource("license.txt", false);
+        }
+    }
+
+    private boolean isEnabledInList(String item, String configPath) {
+        if (getConfig().getBoolean(configPath + ".all-worlds")) {
+            return true;
+        } else {
+            List<String> list = getConfig().getStringList(configPath + ".list");
+            String mode = Objects.requireNonNull(getConfig().getString(configPath + ".mode")).toUpperCase();
+            switch (mode) {
+                case "WHITELIST":
+                    return list.contains(item);
+                case "BLACKLIST":
+                    return !list.contains(item);
+                default:
+                    getLogger().severe("Invalid list mode in config.yml at path='" + configPath + ".mode', must be either 'WHITELIST' or 'BLACKLIST'! This module will not work properly until this is fixed!");
+                    return false;
+            }
         }
     }
 
@@ -40,38 +60,35 @@ public class LittleThings extends JavaPlugin implements Listener {
     public void onEntitySpawn(final EntitySpawnEvent event) {
         Entity entity = event.getEntity();
 
-        if(entity.getType() == EntityType.ARMOR_STAND) {
+        // Armor Stands
+        if (entity.getType() == EntityType.ARMOR_STAND && getConfig().getBoolean("modify-armor-stands.enabled") && isEnabledInList(entity.getWorld().getName(), "modify-armor-stands.worlds")) {
             ArmorStand armorStand = (ArmorStand) entity;
-            armorStand.setArms(getConfig().getBoolean("armor-stand.arms"));
-            armorStand.setBasePlate(getConfig().getBoolean("armor-stand.base-plate"));
+            armorStand.setArms(getConfig().getBoolean("modify-armor-stands.modifications.arms"));
+            armorStand.setBasePlate(getConfig().getBoolean("modify-armor-stands.modifications.base-plate"));
         }
 
-        if(entity instanceof LivingEntity) {
+        // Mob AI
+        if (entity instanceof LivingEntity) {
             LivingEntity livingEntity = (LivingEntity) entity;
-            if(getConfig().getStringList("no-ai").contains(livingEntity.getType().toString())) {
-                livingEntity.setAI(false);
+            if (getConfig().getBoolean("no-mob-ai.enabled")) {
+                if (isEnabledInList(livingEntity.getType().toString(), "no-mob-ai.entities") && isEnabledInList(livingEntity.getWorld().getName(), "no-mob-ai.worlds")) {
+                    livingEntity.setAI(false);
+                }
             }
         }
     }
 
     @EventHandler
-    public void onExplode(final EntityExplodeEvent event) {
-        if(getConfig().getBoolean("explosions.no-block-damage")) {
-            event.blockList().clear();
-        }
-    }
-
-    @EventHandler
     public void onExplode(final BlockExplodeEvent event) {
-        if(getConfig().getBoolean("explosions.no-block-damage")) {
+        if (getConfig().getBoolean("stop-explosions-block-damage.enabled") && isEnabledInList(event.getBlock().getWorld().getName(), "stop-explosions-block-damage.worlds")) {
             event.blockList().clear();
         }
     }
 
     @EventHandler
     public void onSpread(final BlockSpreadEvent event) {
-        if(event.getBlock().getType() == Material.FIRE) {
-            if(getConfig().getBoolean("fire.no-spread")) {
+        if (event.getBlock().getType() == Material.FIRE) {
+            if (getConfig().getBoolean("stop-fire-spread.enabled") && isEnabledInList(event.getBlock().getWorld().getName(), "stop-fire-spread.worlds")) {
                 event.setCancelled(true);
             }
         }
@@ -79,8 +96,17 @@ public class LittleThings extends JavaPlugin implements Listener {
 
     @EventHandler
     public void onDecay(final LeavesDecayEvent event) {
-        if(getConfig().getBoolean("leaves.prevent-decay")) {
+        if (getConfig().getBoolean("stop-leaf-decay.enabled") && isEnabledInList(event.getBlock().getWorld().getName(), "stop-leaf-decay.worlds")) {
             event.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void onCombust(final EntityCombustEvent event) {
+        if (getConfig().getBoolean("stop-daylight-combustion.enabled")) {
+            if (isEnabledInList(event.getEntityType().toString(), "stop-daylight-combustion.entities") && isEnabledInList(event.getEntity().getWorld().getName(), "stop-daylight-combustion.worlds")) {
+                event.setCancelled(true);
+            }
         }
     }
 }

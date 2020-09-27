@@ -1,25 +1,62 @@
 # For configuration changes to take effect, ensure you have saved this file, then restart your server.
 
-armor-stand:
-  # Should armor stands spawn with arms?
-  arms: false
+# You can enable/disable arms and base plates of armor stands here. Will only affect new armorstands.
+modify-armor-stands:
+  enabled: false
+  modifications:
+    arms: false
+    base-plate: true
+  worlds:
+    all-worlds: true # true = ignore worlds list below
+    mode: WHITELIST
+    list: ['world', 'world_nether', 'world_the_end']
 
-  # Should armor stands spawn with a base plate?
-  base-plate: true
+# Stop explosions from destroying blocks. (They will still damage entities!)
+stop-explosions-block-damage:
+  enabled: true
+  worlds:
+    all-worlds: true # true = ignore worlds list below
+    mode: WHITELIST
+    list: ['world', 'world_nether', 'world_the_end']
 
-explosions:
-  # Should explosions not destroy any blocks? (Will still hurt entities!)
-  no-block-damage: false
+# Stop fires from spreading. (They will still ignite!)
+stop-fire-spread:
+  enabled: false
+  worlds:
+    all-worlds: true # true = ignore worlds list below
+    mode: WHITELIST
+    list: ['world', 'world_nether', 'world_the_end']
 
-fire:
-  # Should fires not spread?
-  no-spread: false
-
-leaves:
-  # Should leaves not decay?
-  prevent-decay: false
+# Stop leaves from decaying.
+stop-leaf-decay:
+  enabled: false
+  worlds:
+    all-worlds: true # true = ignore worlds list below
+    mode: WHITELIST
+    list: ['world', 'world_nether', 'world_the_end']
 
 # Which entity types should spawn with no AI?
-# Helps with server performance.
-# You may want to consider adding SQUID, COD, SALMON, PUFFERFISH, TROPICAL_FISH and BAT.
-no-ai: []
+# Helps with server performance, especially to add the useless mobs in.
+no-mob-ai:
+  enabled: false
+  entities:
+    all-entities: false # true = ignore entities list below
+    mode: WHITELIST
+    list: [SQUID, COD, SALMON, PUFFERFISH, TROPICAL_FISH, BAT]
+  worlds:
+    all-worlds: true # true = ignore worlds list below
+    mode: WHITELIST
+    list: ['world', 'world_nether', 'world_the_end']
+
+
+# Prevent mobs from burning in daylight.
+stop-daylight-combustion:
+  enabled: false
+  entities:
+    all-entities: true # true = ignore entities list below
+    mode: WHITELIST
+    list: [ZOMBIE, SKELETON, PHANTOM]
+  worlds:
+    all-worlds: true # true = ignore worlds list below
+    mode: WHITELIST
+    list: ['world', 'world_nether', 'world_the_end']
