@@ -31,4 +31,4 @@
 * Added `debug` to the config (config file update is optional, file version unchanged).
 
 ### v1.2.4
-* Switched `EntityTeleportEvent` for piglin stuff to `EntitySpawnEvent`, should fix an issue reported by Oathkeeper.
+* Switched `EntityTeleportEvent` for piglin stuff to `EntitySpawnEvent`, fixing piglins not being prevented from transforming into zombified piglins. Thanks to Oathkeeper for reporting and testing this version!
