@@ -26,3 +26,6 @@
   
 ### v1.2.2
 * Code change: `Piglin` to `PiglinAbstract`, might fix a bug (or create them?).
+
+### v1.2.3
+* Added `debug` to the config (config file update is optional, file version unchanged).

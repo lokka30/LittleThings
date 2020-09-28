@@ -59,6 +59,12 @@ public class LittleThings extends JavaPlugin implements Listener {
         }
     }
 
+    private void debugMessage(String message) {
+        if (getConfig().contains("debug") && getConfig().getBoolean("debug")) {
+            getLogger().info("[DEBUG] " + message);
+        }
+    }
+
     @EventHandler
     public void onEntitySpawn(final EntitySpawnEvent event) {
         Entity entity = event.getEntity();
@@ -115,8 +121,22 @@ public class LittleThings extends JavaPlugin implements Listener {
 
     @EventHandler
     public void onTeleport(final EntityTeleportEvent event) {
-        if (event.getEntity() instanceof PiglinAbstract && getConfig().getBoolean("stop-piglin-overworld-zombification.enabled")) {
-            ((PiglinAbstract) event.getEntity()).setImmuneToZombification(isEnabledInList(Objects.requireNonNull(Objects.requireNonNull(event.getTo()).getWorld()).getName(), "stop-piglin-overworld-zombification.worlds"));
+        debugMessage("EntityTeleportEvent fired.");
+        if (event.getEntity() instanceof PiglinAbstract) {
+            debugMessage("EntityTeleportEvent: entity '" + event.getEntityType().toString() + "' IS instanceof PiglinAbstract.");
+            if (getConfig().getBoolean("stop-piglin-overworld-zombification.enabled")) {
+                debugMessage("EntityTeleportEvent: Piglin overworld zombification IS disabled in the config.");
+
+                final PiglinAbstract piglinAbstract = (PiglinAbstract) event.getEntity();
+                final boolean isImmune = isEnabledInList(Objects.requireNonNull(Objects.requireNonNull(event.getTo()).getWorld()).getName(), "stop-piglin-overworld-zombification.worlds");
+                piglinAbstract.setImmuneToZombification(isImmune);
+
+                debugMessage("EntityTeleportEvent: Is immune to zombification? -> " + isImmune);
+            } else {
+                debugMessage("EntityTeleportEvent: Piglin overworld zombification IS NOT disabled in the config.");
+            }
+        } else {
+            debugMessage("EntityTeleportEvent: entity '" + event.getEntityType().toString() + "' IS NOT instanceof PiglinAbstract.");
         }
     }
 }

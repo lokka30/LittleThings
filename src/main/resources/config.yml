@@ -70,5 +70,8 @@ stop-piglin-overworld-zombification:
     mode: WHITELIST
     list: ['world', 'world_nether', 'world_the_end']
 
+# Send debug spam into the console?
+debug: false
+
 # Do not change this unless you know what you are doing.
 file-version: 2
