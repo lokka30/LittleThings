@@ -115,8 +115,8 @@ public class LittleThings extends JavaPlugin implements Listener {
 
     @EventHandler
     public void onTeleport(final EntityTeleportEvent event) {
-        if (event.getEntity() instanceof Piglin && getConfig().getBoolean("stop-piglin-overworld-zombification.enabled")) {
-            ((Piglin) event.getEntity()).setImmuneToZombification(isEnabledInList(Objects.requireNonNull(Objects.requireNonNull(event.getTo()).getWorld()).getName(), "stop-piglin-overworld-zombification.worlds"));
+        if (event.getEntity() instanceof PiglinAbstract && getConfig().getBoolean("stop-piglin-overworld-zombification.enabled")) {
+            ((PiglinAbstract) event.getEntity()).setImmuneToZombification(isEnabledInList(Objects.requireNonNull(Objects.requireNonNull(event.getTo()).getWorld()).getName(), "stop-piglin-overworld-zombification.worlds"));
         }
     }
 }

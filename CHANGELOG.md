@@ -23,3 +23,6 @@
 ### v1.2.1
 * Fixed default config value where explosion block damage was enabled by default. It is now disabled by default, as originally intended.
   * No config update is necessary, file version has not changed. :)
+  
+### v1.2.2
+* Code change: `Piglin` to `PiglinAbstract`, might fix a bug (or create them?).
