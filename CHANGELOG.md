@@ -19,3 +19,7 @@
 * Added 'prevent piglin zombification in overworld' feature requested by Oathkeeper
 * Added `file-version` to the `config.yml` file.
 * Fixed an important bug where entity type lists were always used, ignoring if `all-entities` was enabled.
+
+### v1.2.1
+* Fixed default config value where explosion block damage was enabled by default. It is now disabled by default, as originally intended.
+  * No config update is necessary, file version has not changed. :)

@@ -13,7 +13,7 @@ modify-armor-stands:
 
 # Stop explosions from destroying blocks. (They will still damage entities!)
 stop-explosions-block-damage:
-  enabled: true
+  enabled: false
   worlds:
     all: true # true = ignore worlds list below
     mode: WHITELIST
