@@ -29,3 +29,6 @@
 
 ### v1.2.3
 * Added `debug` to the config (config file update is optional, file version unchanged).
+
+### v1.2.4
+* Switched `EntityTeleportEvent` for piglin stuff to `EntitySpawnEvent`, should fix an issue reported by Oathkeeper.

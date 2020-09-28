@@ -10,7 +10,6 @@ import org.bukkit.event.block.BlockSpreadEvent;
 import org.bukkit.event.block.LeavesDecayEvent;
 import org.bukkit.event.entity.EntityCombustEvent;
 import org.bukkit.event.entity.EntitySpawnEvent;
-import org.bukkit.event.entity.EntityTeleportEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -67,6 +66,8 @@ public class LittleThings extends JavaPlugin implements Listener {
 
     @EventHandler
     public void onEntitySpawn(final EntitySpawnEvent event) {
+        debugMessage("EntitySpawnEvent fired.");
+
         Entity entity = event.getEntity();
 
         // Armor Stands
@@ -84,6 +85,24 @@ public class LittleThings extends JavaPlugin implements Listener {
                     livingEntity.setAI(false);
                 }
             }
+        }
+
+        // Piglins
+        if (entity instanceof PiglinAbstract) {
+            debugMessage("EntitySpawnEvent: Entity '" + event.getEntityType().toString() + "' IS instanceof PiglinAbstract.");
+            if (getConfig().getBoolean("stop-piglin-overworld-zombification.enabled")) {
+                debugMessage("EntitySpawnEvent: Piglin overworld zombification IS disabled in the config.");
+
+                final PiglinAbstract piglinAbstract = (PiglinAbstract) event.getEntity();
+                final boolean isImmune = isEnabledInList(Objects.requireNonNull(entity.getWorld()).getName(), "stop-piglin-overworld-zombification.worlds");
+                piglinAbstract.setImmuneToZombification(isImmune);
+
+                debugMessage("EntitySpawnEvent: Is immune to zombification? -> " + isImmune);
+            } else {
+                debugMessage("EntitySpawnEvent: Piglin overworld zombification IS NOT disabled in the config.");
+            }
+        } else {
+            debugMessage("EntitySpawnEvent: Entity '" + event.getEntityType().toString() + "' IS NOT instanceof PiglinAbstract.");
         }
     }
 
@@ -116,27 +135,6 @@ public class LittleThings extends JavaPlugin implements Listener {
             if (isEnabledInList(event.getEntityType().toString(), "stop-daylight-combustion.entities") && isEnabledInList(event.getEntity().getWorld().getName(), "stop-daylight-combustion.worlds")) {
                 event.setCancelled(true);
             }
-        }
-    }
-
-    @EventHandler
-    public void onTeleport(final EntityTeleportEvent event) {
-        debugMessage("EntityTeleportEvent fired.");
-        if (event.getEntity() instanceof PiglinAbstract) {
-            debugMessage("EntityTeleportEvent: entity '" + event.getEntityType().toString() + "' IS instanceof PiglinAbstract.");
-            if (getConfig().getBoolean("stop-piglin-overworld-zombification.enabled")) {
-                debugMessage("EntityTeleportEvent: Piglin overworld zombification IS disabled in the config.");
-
-                final PiglinAbstract piglinAbstract = (PiglinAbstract) event.getEntity();
-                final boolean isImmune = isEnabledInList(Objects.requireNonNull(Objects.requireNonNull(event.getTo()).getWorld()).getName(), "stop-piglin-overworld-zombification.worlds");
-                piglinAbstract.setImmuneToZombification(isImmune);
-
-                debugMessage("EntityTeleportEvent: Is immune to zombification? -> " + isImmune);
-            } else {
-                debugMessage("EntityTeleportEvent: Piglin overworld zombification IS NOT disabled in the config.");
-            }
-        } else {
-            debugMessage("EntityTeleportEvent: entity '" + event.getEntityType().toString() + "' IS NOT instanceof PiglinAbstract.");
         }
     }
 }
