@@ -35,6 +35,11 @@ public class LittleThings extends JavaPlugin implements Listener {
         logger.info("Plugin enabled.");
     }
 
+    @Override
+    public void onDisable() {
+        logger.info("Plugin disabled.");
+    }
+
     private void loadFiles() {
         saveIfNotExists("config.yml");
         saveIfNotExists("license.txt");
