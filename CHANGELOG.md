@@ -32,3 +32,7 @@
 
 ### v1.2.4
 * Switched `EntityTeleportEvent` for piglin stuff to `EntitySpawnEvent`, fixing piglins not being prevented from transforming into zombified piglins. Thanks to Oathkeeper for reporting and testing this version!
+
+### v1.2.5
+* Minor change, update not required. Moved logging to MicroLib's MicroLogger. You do not need to install MicroLib, as LittleThings has it shaded inside its .jar file.
+  * This was mainly done to make sure that MicroLib v2 is working properly. :)

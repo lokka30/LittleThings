@@ -6,7 +6,7 @@
 
     <groupId>me.lokka30</groupId>
     <artifactId>LittleThings</artifactId>
-    <version>1.2.4</version>
+    <version>1.2.5</version>
 
     <name>LittleThings</name>
     <description>A SpigotMC plugin that adds configurable options to manipulate certain events.</description>
@@ -22,6 +22,10 @@
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
         <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+        <repository>
             <id>CodeMC</id>
             <url>https://repo.codemc.org/repository/maven-public</url>
         </repository>
@@ -33,6 +37,11 @@
             <artifactId>spigot-api</artifactId>
             <version>1.16.3-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.lokka30</groupId>
+            <artifactId>MicroLib</artifactId>
+            <version>af1a8eac3a</version>
         </dependency>
         <dependency>
             <groupId>org.bstats</groupId>
@@ -60,8 +69,12 @@
                 <configuration>
                     <relocations>
                         <relocation>
+                            <pattern>me.lokka30.microlib</pattern>
+                            <shadedPattern>me.lokka30.littlethings.microlib</shadedPattern>
+                        </relocation>
+                        <relocation>
                             <pattern>org.bstats</pattern>
-                            <shadedPattern>me.lokka30.littlethings.bStats</shadedPattern>
+                            <shadedPattern>me.lokka30.littlethings.bstats</shadedPattern>
                         </relocation>
                     </relocations>
                 </configuration>

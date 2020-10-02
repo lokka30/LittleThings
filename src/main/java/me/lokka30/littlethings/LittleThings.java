@@ -1,5 +1,6 @@
 package me.lokka30.littlethings;
 
+import me.lokka30.microlib.MicroLogger;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Material;
 import org.bukkit.entity.*;
@@ -18,27 +19,46 @@ import java.util.Objects;
 
 public class LittleThings extends JavaPlugin implements Listener {
 
+    public final MicroLogger logger = new MicroLogger("&b&lLittleThings: &7");
+
     @Override
     public void onEnable() {
-        // Generate files if they don't exist.
+        logger.info("Loading files...");
+        loadFiles();
+
+        logger.info("Registering events...");
+        registerEvents();
+
+        logger.info("Registering bStats metrics...");
+        registerMetrics();
+
+        logger.info("Plugin enabled.");
+    }
+
+    private void loadFiles() {
         saveIfNotExists("config.yml");
         saveIfNotExists("license.txt");
         if (getConfig().getInt("file-version") != 2) {
             getLogger().warning("Your config.yml file is not the correct version (outdated?). Reset the file or merge your current file, else it is very likely that you will experience errors. Please read the update changelogs!");
         }
-
-        // Register events.
-        getServer().getPluginManager().registerEvents(this, this);
-
-        // Register metrics.
-        new Metrics(this, 8934);
     }
 
     private void saveIfNotExists(String fileName) {
         if (!(new File(getDataFolder(), fileName).exists())) {
+            logger.info("File '&b" + fileName + "&7' didn't exist, generating it...");
             saveResource(fileName, false);
         }
     }
+
+    private void registerEvents() {
+        getServer().getPluginManager().registerEvents(this, this);
+    }
+
+    private void registerMetrics() {
+        new Metrics(this, 8934);
+    }
+
+    /* Code below will be distributed into multiple other classes in future versions */
 
     private boolean isEnabledInList(String item, String configPath) {
         if (getConfig().getBoolean(configPath + ".all")) {
@@ -60,7 +80,7 @@ public class LittleThings extends JavaPlugin implements Listener {
 
     private void debugMessage(String message) {
         if (getConfig().contains("debug") && getConfig().getBoolean("debug")) {
-            getLogger().info("[DEBUG] " + message);
+            logger.info("&8[DEBUG] &7" + message);
         }
     }
 
