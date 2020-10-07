@@ -36,3 +36,8 @@
 ### v1.2.5
 * Minor change, update not required. Moved logging to MicroLib's MicroLogger. You do not need to install MicroLib, as LittleThings has it shaded inside its .jar file.
   * This was mainly done to make sure that MicroLib v2 is working properly. :)
+  
+### v1.2.6
+* **You need to reset your config!**
+* **This update was not tested.**
+* Added 'stop crop trampling', kindly suggested by Oathkeeper

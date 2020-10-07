@@ -9,6 +9,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.block.BlockSpreadEvent;
 import org.bukkit.event.block.LeavesDecayEvent;
+import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityCombustEvent;
 import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -43,7 +44,7 @@ public class LittleThings extends JavaPlugin implements Listener {
     private void loadFiles() {
         saveIfNotExists("config.yml");
         saveIfNotExists("license.txt");
-        if (getConfig().getInt("file-version") != 2) {
+        if (getConfig().getInt("file-version") != 3) {
             getLogger().warning("Your config.yml file is not the correct version (outdated?). Reset the file or merge your current file, else it is very likely that you will experience errors. Please read the update changelogs!");
         }
     }
@@ -159,6 +160,41 @@ public class LittleThings extends JavaPlugin implements Listener {
         if (getConfig().getBoolean("stop-daylight-combustion.enabled")) {
             if (isEnabledInList(event.getEntityType().toString(), "stop-daylight-combustion.entities") && isEnabledInList(event.getEntity().getWorld().getName(), "stop-daylight-combustion.worlds")) {
                 event.setCancelled(true);
+            }
+        }
+    }
+
+    @EventHandler
+    public void onTrample(final EntityChangeBlockEvent event) {
+        debugMessage("onTrample:EntityChangeBlockEvent -> Event called.");
+
+        Material farmland;
+
+        try {
+            farmland = Material.valueOf("FARMLAND");
+            debugMessage("onTrample:EntityChangeBlockEvent -> Farmland = 'FARMLAND'");
+        } catch (IllegalArgumentException exception) {
+            try {
+                debugMessage("onTrample:EntityChangeBlockEvent -> Farmland = 'SOIL'.");
+                farmland = Material.valueOf("SOIL");
+            } catch (IllegalArgumentException exception2) {
+                debugMessage("onTrample:EntityChangeBlockEvent -> Error.");
+                getLogger().severe("LittleThings wasn't able to find the farmland material for your Minecraft version. Please report this issue, as crops will not be prevented from being trampled until this is fixed.");
+                return;
+            }
+        }
+
+        if (event.getTo() == Material.DIRT && event.getBlock().getType() == farmland) {
+            debugMessage("onTrample:EntityChangeBlockEvent -> Yep, block change was farmland > dirt.");
+
+            if (getConfig().getBoolean("stop-crop-trampling.enabled")) {
+                debugMessage("onTrample:EntityChangeBlockEvent -> Yep, is enabled.");
+
+                if (isEnabledInList(event.getEntity().getWorld().getName(), "stop-crop-trampling.worlds")) {
+                    debugMessage("onTrample:EntityChangeBlockEvent -> Yep, world is enabled. Cancelling.");
+
+                    event.setCancelled(true);
+                }
             }
         }
     }

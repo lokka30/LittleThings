@@ -55,11 +55,11 @@ stop-daylight-combustion:
   entities:
     all-entities: true # true = ignore entities list below
     mode: WHITELIST
-    list: [ZOMBIE, SKELETON, PHANTOM]
+    list: [ ZOMBIE, SKELETON, PHANTOM ]
   worlds:
     all: true # true = ignore worlds list below
     mode: WHITELIST
-    list: ['world', 'world_nether', 'world_the_end']
+    list: [ 'world', 'world_nether', 'world_the_end' ]
 
 # In 1.16+, when piglins teleport to the overworld, they become zombified.
 # This feature allows you to stop this from happening.
@@ -68,10 +68,18 @@ stop-piglin-overworld-zombification:
   worlds:
     all: true # true = ignore worlds list below
     mode: WHITELIST
-    list: ['world', 'world_nether', 'world_the_end']
+    list: [ 'world', 'world_nether', 'world_the_end' ]
+
+# Here, you can stop crops from being trampled by entities.
+stop-crop-trampling:
+  enabled: false
+  worlds:
+    all: true # true = ignore worlds list below
+    mode: WHITELIST
+    list: [ 'world', 'world_nether', 'world_the_end' ]
 
 # Send debug spam into the console?
 debug: false
 
 # Do not change this unless you know what you are doing.
-file-version: 2
+file-version: 3
