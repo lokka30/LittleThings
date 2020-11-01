@@ -9,7 +9,7 @@ modify-armor-stands:
   worlds:
     all: true # true = ignore worlds list below
     mode: WHITELIST
-    list: ['world', 'world_nether', 'world_the_end']
+    list: [ 'world', 'world_nether', 'world_the_end' ]
 
 # Stop explosions from destroying blocks. (They will still damage entities!)
 stop-explosions-block-damage:
@@ -17,7 +17,7 @@ stop-explosions-block-damage:
   worlds:
     all: true # true = ignore worlds list below
     mode: WHITELIST
-    list: ['world', 'world_nether', 'world_the_end']
+    list: [ 'world', 'world_nether', 'world_the_end' ]
 
 # Stop fires from spreading. (They will still ignite!)
 stop-fire-spread:
@@ -25,7 +25,7 @@ stop-fire-spread:
   worlds:
     all: true # true = ignore worlds list below
     mode: WHITELIST
-    list: ['world', 'world_nether', 'world_the_end']
+    list: [ 'world', 'world_nether', 'world_the_end' ]
 
 # Stop leaves from decaying.
 stop-leaf-decay:
@@ -33,7 +33,7 @@ stop-leaf-decay:
   worlds:
     all: true # true = ignore worlds list below
     mode: WHITELIST
-    list: ['world', 'world_nether', 'world_the_end']
+    list: [ 'world', 'world_nether', 'world_the_end' ]
 
 # Which entity types should spawn with no AI?
 # Helps with server performance, especially to add the useless mobs in.
@@ -42,11 +42,11 @@ no-mob-ai:
   entities:
     all: false # true = ignore entities list below
     mode: WHITELIST
-    list: [SQUID, COD, SALMON, PUFFERFISH, TROPICAL_FISH, BAT]
+    list: [ SQUID, COD, SALMON, PUFFERFISH, TROPICAL_FISH, BAT ]
   worlds:
     all: true # true = ignore worlds list below
     mode: WHITELIST
-    list: ['world', 'world_nether', 'world_the_end']
+    list: [ 'world', 'world_nether', 'world_the_end' ]
 
 
 # Stop mobs from burning in daylight.
@@ -78,8 +78,20 @@ stop-crop-trampling:
     mode: WHITELIST
     list: [ 'world', 'world_nether', 'world_the_end' ]
 
+# Here, you can stop blocks from falling (e.g. sand and gravel)
+stop-block-gravity:
+  enabled: false
+  worlds:
+    all: true # true = ignore worlds list below
+    mode: WHITELIST
+    list: [ 'world', 'world_nether', 'world_the_end' ]
+  materials: # What materials should be blocked?
+    all: true # true = ignore materials list below
+    mode: WHITELIST
+    list: [ 'SAND', 'RED_SAND', 'GRAVEL', 'WHITE_CONCRETE_POWDER', 'LIGHT_BLUE_CONCRETE_POWDER' ]
+
 # Send debug spam into the console?
 debug: false
 
 # Do not change this unless you know what you are doing.
-file-version: 3
+file-version: 4

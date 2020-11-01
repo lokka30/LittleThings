@@ -1,4 +1,4 @@
-name: ${project.name}
+name: LittleThings
 version: ${project.version}
 author: lokka30
 main: me.lokka30.littlethings.LittleThings
@@ -6,3 +6,23 @@ website: 'https://www.spigotmc.org/'
 api-version: '1.13'
 load: STARTUP
 description: ${project.description}
+
+commands:
+  littlethings:
+    aliases: [ lt, littlething ]
+    description: Manage the plugin, or view information about it.
+    usage: /<command> [reload]
+
+permissions:
+  littlethings.*:
+    description: All LittleThings permissions.
+    default: op
+    children:
+      littlethings.command: true
+      littlethings.reload: true
+  littlethings.command:
+    default: true
+    description: 'Allows players to run the ''/littlethings'' command.'
+  littlethinds.reload:
+    default: op
+    description: 'Ability to reload the configuration using the ''/littlethings reload'' command.'

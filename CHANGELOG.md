@@ -41,3 +41,14 @@
 * **You need to reset your config!**
 * **This update was not tested.**
 * Added 'stop crop trampling', kindly suggested by Oathkeeper
+
+### v1.3.0
+* **IMPORTANT:** `config.yml` updated! you must update your config, else you will receive errors.
+* Added a `/littlethings` command, including a `reload` subcommand :)
+    * Includes tab completion.
+    * New permissions for the command:
+      * `littlethings.command` is required to run the command, given to all users by default
+      * `littlethings.reload` is required to run the reload subcommand, given to operators by default
+    * Customisable messages are on the to-do list.
+* Moved all listeners to separate classes. Far cleaner code now :)
+* Fixed StopFarmlandTrampling material error logging using Bukkit's logger instead of MicroLogger
