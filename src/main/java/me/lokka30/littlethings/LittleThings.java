@@ -44,8 +44,8 @@ public class LittleThings extends JavaPlugin implements Listener {
     private void loadFiles() {
         saveIfNotExists("config.yml");
         saveIfNotExists("license.txt");
-        if (getConfig().getInt("file-version") != 4) {
-            getLogger().warning("Your config.yml file is not the correct version (outdated?). Reset the file or merge your current file, else it is very likely that you will experience errors. Please read the top of the update changelogs next time :)");
+        if (getConfig().getInt("file-version") != 5) {
+            logger.warning("Your config.yml file is not the correct version (outdated?). Reset the file or merge your current file, else errors may occur.");
         }
     }
 
@@ -78,7 +78,15 @@ public class LittleThings extends JavaPlugin implements Listener {
         new Metrics(this, 8934);
     }
 
-    /* Code below will be distributed into multiple other classes in future versions */
+    public boolean isModuleEnabled(String configPath) {
+        configPath = configPath + ".enabled";
+
+        if (getConfig().contains(configPath)) {
+            return getConfig().getBoolean(configPath);
+        } else {
+            return false;
+        }
+    }
 
     public boolean isEnabledInList(String item, String configPath) {
         if (getConfig().getBoolean(configPath + ".all")) {
@@ -92,7 +100,7 @@ public class LittleThings extends JavaPlugin implements Listener {
                 case "BLACKLIST":
                     return !list.contains(item);
                 default:
-                    getLogger().severe("Invalid list mode in config.yml at path='" + configPath + ".mode', must be either 'WHITELIST' or 'BLACKLIST'! This module will not work properly until this is fixed!");
+                    logger.error("Invalid list mode in config.yml at path='" + configPath + ".mode', must be either 'WHITELIST' or 'BLACKLIST'! This module will not work properly until this is fixed!");
                     return false;
             }
         }

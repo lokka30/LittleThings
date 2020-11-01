@@ -20,7 +20,7 @@ public class StopBlockGravity implements Listener {
         final Entity entity = event.getEntity();
 
         if (entity instanceof FallingBlock) {
-            if (!instance.getConfig().getBoolean("stop-block-gravity.enabled")) {
+            if (!instance.isModuleEnabled("stop-block-gravity")) {
                 return;
             }
             if (!instance.isEnabledInList(event.getBlock().getType().toString(), "stop-block-gravity.materials")) {

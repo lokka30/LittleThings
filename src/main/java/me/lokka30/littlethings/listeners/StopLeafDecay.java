@@ -15,7 +15,7 @@ public class StopLeafDecay implements Listener {
 
     @EventHandler
     public void onDecay(final LeavesDecayEvent event) {
-        if (instance.getConfig().getBoolean("stop-leaf-decay.enabled")
+        if (instance.isModuleEnabled("stop-leaf-decay")
                 && instance.isEnabledInList(event.getBlock().getWorld().getName(), "stop-leaf-decay.worlds")) {
             event.setCancelled(true);
         }

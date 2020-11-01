@@ -16,10 +16,15 @@ public class StopFireSpread implements Listener {
 
     @EventHandler
     public void onSpread(final BlockSpreadEvent event) {
-        if (event.getBlock().getType() == Material.FIRE) {
-            if (instance.getConfig().getBoolean("stop-fire-spread.enabled") && instance.isEnabledInList(event.getBlock().getWorld().getName(), "stop-fire-spread.worlds")) {
-                event.setCancelled(true);
-            }
+        if (event.getBlock().getType() != Material.FIRE) {
+            return;
         }
+        if (!instance.isModuleEnabled("stop-fire-spread")) {
+            return;
+        }
+        if (!instance.isEnabledInList(event.getBlock().getWorld().getName(), "stop-fire-spread.worlds")) {
+            return;
+        }
+        event.setCancelled(true);
     }
 }

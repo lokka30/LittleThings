@@ -52,3 +52,8 @@
     * Customisable messages are on the to-do list.
 * Moved all listeners to separate classes. Far cleaner code now :)
 * Fixed StopFarmlandTrampling material error logging using Bukkit's logger instead of MicroLogger
+
+### v1.3.1
+* **Optional:** `config.yml` updated to v5.
+* Various code improvements. When new modules are added, you no longer need to update your config (so long you don't want to use them).
+* Added a 'Stop Portals from Teleporting Players' function, as kindly suggested by Oathkeeper! You can also specify which portals to block.

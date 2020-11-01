@@ -20,7 +20,7 @@ public class ModifyArmorStands implements Listener {
     public void onEntitySpawn(final EntitySpawnEvent event) {
         Entity entity = event.getEntity();
 
-        if (entity.getType() == EntityType.ARMOR_STAND && instance.getConfig().getBoolean("modify-armor-stands.enabled") && instance.isEnabledInList(entity.getWorld().getName(), "modify-armor-stands.worlds")) {
+        if (entity.getType() == EntityType.ARMOR_STAND && instance.isModuleEnabled("modify-armor-stands") && instance.isEnabledInList(entity.getWorld().getName(), "modify-armor-stands.worlds")) {
             ArmorStand armorStand = (ArmorStand) entity;
             armorStand.setArms(instance.getConfig().getBoolean("modify-armor-stands.modifications.arms"));
             armorStand.setBasePlate(instance.getConfig().getBoolean("modify-armor-stands.modifications.base-plate"));

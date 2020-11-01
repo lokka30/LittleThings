@@ -21,7 +21,7 @@ public class MobAI implements Listener {
 
         if (entity instanceof LivingEntity) {
             LivingEntity livingEntity = (LivingEntity) entity;
-            if (instance.getConfig().getBoolean("no-mob-ai.enabled")) {
+            if (instance.isModuleEnabled("no-mob-ai.enabled")) {
                 if (instance.isEnabledInList(livingEntity.getType().toString(), "no-mob-ai.entities") && instance.isEnabledInList(livingEntity.getWorld().getName(), "no-mob-ai.worlds")) {
                     livingEntity.setAI(false);
                 }

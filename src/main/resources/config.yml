@@ -90,8 +90,20 @@ stop-block-gravity:
     mode: WHITELIST
     list: [ 'SAND', 'RED_SAND', 'GRAVEL', 'WHITE_CONCRETE_POWDER', 'LIGHT_BLUE_CONCRETE_POWDER' ]
 
+# Here, you can disable portals from teleporting players. You can still place them and use them otherwise.
+stop-portal-teleport:
+  enabled: false
+  worlds: # In what worlds are players prevented from teleporting through portals?
+    all: true # true = ignore worlds list below
+    mode: WHITELIST
+    list: [ 'world', 'another_world' ]
+  portals: # In what portals are players prevented from teleporting through?
+    all: true
+    mode: WHITELIST
+    list: [ 'END_PORTAL', 'NETHER_PORTAL' ]
+
 # Send debug spam into the console?
 debug: false
 
 # Do not change this unless you know what you are doing.
-file-version: 4
+file-version: 5

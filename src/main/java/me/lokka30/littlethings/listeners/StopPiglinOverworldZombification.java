@@ -24,7 +24,7 @@ public class StopPiglinOverworldZombification implements Listener {
 
         if (entity instanceof PiglinAbstract) {
             instance.debugMessage("EntitySpawnEvent: Entity '" + event.getEntityType().toString() + "' is instanceof PiglinAbstract");
-            if (instance.getConfig().getBoolean("stop-piglin-overworld-zombification.enabled")) {
+            if (instance.isModuleEnabled("stop-piglin-overworld-zombification")) {
                 instance.debugMessage("EntitySpawnEvent: Piglin overworld zombification IS disabled in the config.");
 
                 final PiglinAbstract piglinAbstract = (PiglinAbstract) event.getEntity();

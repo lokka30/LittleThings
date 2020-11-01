@@ -16,7 +16,9 @@ public class StopFarmlandTrampling implements Listener {
 
     @EventHandler
     public void onTrample(final EntityChangeBlockEvent event) {
-        instance.debugMessage("onTrample:EntityChangeBlockEvent -> Event called.");
+        if (!instance.isModuleEnabled("stop-crop-trampling")) {
+            return;
+        }
 
         Material farmland;
 
@@ -37,14 +39,10 @@ public class StopFarmlandTrampling implements Listener {
         if (event.getTo() == Material.DIRT && event.getBlock().getType() == farmland) {
             instance.debugMessage("onTrample:EntityChangeBlockEvent -> Yep, block change was farmland > dirt.");
 
-            if (instance.getConfig().getBoolean("stop-crop-trampling.enabled")) {
-                instance.debugMessage("onTrample:EntityChangeBlockEvent -> Yep, is enabled.");
+            if (instance.isEnabledInList(event.getEntity().getWorld().getName(), "stop-crop-trampling.worlds")) {
+                instance.debugMessage("onTrample:EntityChangeBlockEvent -> Yep, world is enabled. Cancelling.");
 
-                if (instance.isEnabledInList(event.getEntity().getWorld().getName(), "stop-crop-trampling.worlds")) {
-                    instance.debugMessage("onTrample:EntityChangeBlockEvent -> Yep, world is enabled. Cancelling.");
-
-                    event.setCancelled(true);
-                }
+                event.setCancelled(true);
             }
         }
     }
