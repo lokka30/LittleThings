@@ -65,4 +65,5 @@
 
 ### Changelog:
 * Added configurable messages in the config.yml file.
-* Added a bypass permission for the *Stop Portal Teleport* module: `littlethings.bypass.stop-portal-teleport`
+* Added a bypass permission for the *Stop Portal Teleport* module: `littlethings.bypass.stop-portal-teleport`'
+* Updated deps
