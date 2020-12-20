@@ -8,6 +8,7 @@ import org.bukkit.command.TabExecutor;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class LTCommand implements TabExecutor {
 
@@ -17,32 +18,44 @@ public class LTCommand implements TabExecutor {
         this.instance = instance;
     }
 
+    private List<String> getColoredListFromConfig(String path) {
+        List<String> messages = new ArrayList<>();
+
+        for (String message : instance.getConfig().getStringList(path)) {
+            message = message.replace("%prefix%",
+                    Objects.requireNonNull(instance.getConfig().getString("messages.prefix")));
+            message = MicroUtils.colorize(message);
+
+            messages.add(message);
+        }
+
+        return messages;
+    }
+
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (sender.hasPermission("littlethings.command")) {
             if (args.length == 0) {
-                sender.sendMessage(" ");
-                sender.sendMessage(MicroUtils.colorize("&f&nAbout:"));
-                sender.sendMessage(MicroUtils.colorize("&bLittleThings v" + instance.getDescription().getVersion() + "&7 by &flokka30"));
-                sender.sendMessage(MicroUtils.colorize("&7LittleThings is a small plugin which allows server administrators to modify certain events such as disabling fire spread and adding arms to armor stands."));
-                sender.sendMessage(" ");
-                sender.sendMessage(MicroUtils.colorize("&f&nAvailable Commands:"));
-                sender.sendMessage(MicroUtils.colorize("&8 &m->&b /" + label + " &8- &7View plugin information."));
-                sender.sendMessage(MicroUtils.colorize("&8 &m->&b /" + label + " reload &8- &7Reload the config file."));
-                sender.sendMessage(" ");
+
+                getColoredListFromConfig("messages.main").forEach(message -> {
+                    message = message.replace("%label%", label);
+                    message = message.replace("%version%", instance.getDescription().getVersion());
+                    sender.sendMessage(message);
+                });
+
             } else if (args.length == 1 && args[0].equalsIgnoreCase("reload")) {
                 if (sender.hasPermission("littlethings.reload")) {
-                    sender.sendMessage(MicroUtils.colorize("&b&lLittleThings: &7Reloading configuration..."));
+                    getColoredListFromConfig("messages.reload.start").forEach(sender::sendMessage);
                     instance.reloadConfig();
-                    sender.sendMessage(MicroUtils.colorize("&b&lLittleThings: &7Reloading complete."));
+                    getColoredListFromConfig("messages.reload.finish").forEach(sender::sendMessage);
                 } else {
-                    sender.sendMessage(MicroUtils.colorize("&b&lLittleThings: &7You don't have access to that."));
+                    getColoredListFromConfig("messages.no-permission").forEach(sender::sendMessage);
                 }
             } else {
-                sender.sendMessage(MicroUtils.colorize("&b&lLittleThings: &7Usage: &b/" + label + " [reload]"));
+                getColoredListFromConfig("messages.usage").forEach(message -> sender.sendMessage(message.replace("%label%", label)));
             }
         } else {
-            sender.sendMessage(MicroUtils.colorize("&b&lLittleThings: &7You don't have access to that."));
+            getColoredListFromConfig("messages.no-permission").forEach(sender::sendMessage);
         }
         return true;
     }

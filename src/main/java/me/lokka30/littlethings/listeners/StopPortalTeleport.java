@@ -26,6 +26,9 @@ public class StopPortalTeleport implements Listener {
         if (!instance.isEnabledInList(event.getCause().toString(), "stop-portal-teleport.portals")) {
             return;
         }
+        if (event.getPlayer().hasPermission("littlethings.bypass.stop-portal-teleport")) {
+            return;
+        }
 
         event.setCancelled(true);
     }

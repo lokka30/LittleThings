@@ -44,7 +44,7 @@ public class LittleThings extends JavaPlugin implements Listener {
     private void loadFiles() {
         saveIfNotExists("config.yml");
         saveIfNotExists("license.txt");
-        if (getConfig().getInt("file-version") != 5) {
+        if (getConfig().getInt("file-version") != 6) {
             logger.warning("Your config.yml file is not the correct version (outdated?). Reset the file or merge your current file, else errors may occur.");
         }
     }
