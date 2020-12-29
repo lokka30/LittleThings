@@ -64,9 +64,10 @@ public class LittleThings extends JavaPlugin {
         modules.forEach(module -> {
             module.reloadModule();
             if (module.getInstalledConfigVersion() != module.getLatestConfigVersion()) {
-                instance.logger.error("Module &b" + getName() + "&7's config has a mismatched version (outdated?). Please replace it as soon as possible else errors are highly likely to occur.");
+                logger.error("Module &b" + module.getName() + "&7's config has a mismatched version (outdated?). Please replace it as soon as possible else errors are highly likely to occur.");
+                debugMessage("MismatchedVersion: (Installed) v" + module.getInstalledConfigVersion() + " != (Latest) v" + module.getLatestConfigVersion() + ".");
             }
-            logger.info("Reloaded module &b" + module + "&7 with status &b" + (module.isEnabled() ? "enabled" : "disabled") + "&7.");
+            logger.info("Reloaded module &b" + module.getName() + "&7 with status &b" + (module.isEnabled() ? "enabled" : "disabled") + "&7.");
         });
     }
 
