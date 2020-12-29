@@ -80,7 +80,8 @@ public class LittleThings extends JavaPlugin {
     }
 
     public void saveModuleConfigFile(String moduleName) {
-        saveOuterResource(new File(getDataFolder().getPath() + File.separator + "modules"), "modules" + File.separator + moduleName + ".yml", false);
+        saveResource("modules" + File.separator + moduleName + ".yml", false);
+        //TODO saveOuterResource(new File(getDataFolder().getPath() + File.separator + "modules"), "modules" + File.separator + moduleName + ".yml", false);
     }
 
     public boolean isEnabledInList(String moduleName, YamlConfiguration config, String item, String configPath) {
