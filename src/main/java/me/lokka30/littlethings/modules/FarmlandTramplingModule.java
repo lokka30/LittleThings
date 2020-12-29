@@ -90,10 +90,10 @@ public class FarmlandTramplingModule implements LittleModule {
             }
 
             if (event.getTo() == Material.DIRT && event.getBlock().getType().toString().equals(farmlandMaterial)) {
-                instance.debugMessage("FarmlandTrampling: Yep, block change was farmland > dirt.");
+                instance.debugMessage("FarmlandTrampling: farmland > dirt");
 
                 if (instance.isEnabledInList(getName(), moduleConfig, event.getEntity().getWorld().getName(), "worlds")) {
-                    instance.debugMessage("FarmlandTrampling: Yep, world is enabled. Cancelling trample by entity.");
+                    instance.debugMessage("FarmlandTrampling: world is enabled. cancelling trample by entity.");
 
                     event.setCancelled(true);
                 }

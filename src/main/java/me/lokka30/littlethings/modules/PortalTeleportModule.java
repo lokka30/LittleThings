@@ -81,6 +81,7 @@ public class PortalTeleportModule implements LittleModule {
                 return;
             }
 
+            instance.debugMessage("PortalTeleport: stopping teleportation of " + event.getPlayer().getName() + ", cause: " + event.getCause().toString());
             event.setCancelled(true);
         }
     }

@@ -67,18 +67,24 @@ public class FireSpreadModule implements LittleModule {
     private class Listeners implements Listener {
         @EventHandler
         public void onSpread(final BlockSpreadEvent event) {
+            instance.debugMessage("FireSpread: event called");
+
             if (!isEnabled) {
+                instance.debugMessage("FireSpread: not enabled");
                 return;
             }
 
             if (event.getBlock().getType() != Material.FIRE) {
+                instance.debugMessage("FireSpread: material not fire");
                 return;
             }
 
             if (!instance.isEnabledInList(getName(), moduleConfig, event.getBlock().getWorld().getName(), "worlds")) {
+                instance.debugMessage("FireSpread: world not enabled in list");
                 return;
             }
 
+            instance.debugMessage("FireSpread: cancelling fire spread");
             event.setCancelled(true);
         }
     }
