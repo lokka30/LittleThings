@@ -69,6 +69,7 @@ public class ExplosionBlockDamageModule implements LittleModule {
             if (!isEnabled) {
                 return;
             }
+
             if (!instance.isEnabledInList(getName(), moduleConfig, event.getBlock().getWorld().getName(), "worlds")) {
                 return;
             }

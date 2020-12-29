@@ -13,6 +13,7 @@ import java.io.File;
 
 public class FarmlandTramplingModule implements LittleModule {
 
+    String farmlandMaterial;
     public boolean isEnabled;
     private LittleThings instance;
     private YamlConfiguration moduleConfig;
@@ -56,7 +57,24 @@ public class FarmlandTramplingModule implements LittleModule {
     public void loadModule() {
         instance = LittleThings.getInstance();
         loadConfig();
+        loadFarmlandMaterial();
         Bukkit.getPluginManager().registerEvents(new Listeners(), LittleThings.getInstance());
+    }
+
+    private void loadFarmlandMaterial() {
+        try {
+            Material.valueOf("FARMLAND");
+            farmlandMaterial = "FARMLAND";
+        } catch (IllegalArgumentException exception) {
+            try {
+                Material.valueOf("SOIL");
+                farmlandMaterial = "SOIL";
+            } catch (IllegalArgumentException exception2) {
+                instance.debugMessage("FarmlandTrampling: unknown farmland material?");
+                instance.logger.error("LittleThings wasn't able to find the farmland material for your Minecraft version. Please report this issue, as crops will not be prevented from being trampled until this is fixed.");
+                isEnabled = false;
+            }
+        }
     }
 
     @Override
@@ -71,23 +89,7 @@ public class FarmlandTramplingModule implements LittleModule {
                 return;
             }
 
-            Material farmland;
-
-            try {
-                farmland = Material.valueOf("FARMLAND");
-                instance.debugMessage("FarmlandTrampling: Farmland='FARMLAND'");
-            } catch (IllegalArgumentException exception) {
-                try {
-                    farmland = Material.valueOf("SOIL");
-                    instance.debugMessage("FarmlandTrampling: Farmland='SOIL'");
-                } catch (IllegalArgumentException exception2) {
-                    instance.debugMessage("FarmlandTrampling: unknown farmland material?");
-                    instance.logger.error("LittleThings wasn't able to find the farmland material for your Minecraft version. Please report this issue, as crops will not be prevented from being trampled until this is fixed.");
-                    return;
-                }
-            }
-
-            if (event.getTo() == Material.DIRT && event.getBlock().getType() == farmland) {
+            if (event.getTo() == Material.DIRT && event.getBlock().getType().toString().equals(farmlandMaterial)) {
                 instance.debugMessage("FarmlandTrampling: Yep, block change was farmland > dirt.");
 
                 if (instance.isEnabledInList(getName(), moduleConfig, event.getEntity().getWorld().getName(), "worlds")) {

@@ -84,6 +84,7 @@ public class BlockGravityModule implements LittleModule {
             }
 
             event.setCancelled(true);
+            event.getBlock().getState().update();
         }
     }
 }
