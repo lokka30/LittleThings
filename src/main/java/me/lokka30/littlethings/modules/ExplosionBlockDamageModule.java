@@ -6,7 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockExplodeEvent;
+import org.bukkit.event.entity.EntityExplodeEvent;
 
 import java.io.File;
 
@@ -65,7 +65,7 @@ public class ExplosionBlockDamageModule implements LittleModule {
 
     private class Listeners implements Listener {
         @EventHandler
-        public void onExplode(final BlockExplodeEvent event) {
+        public void onExplode(final EntityExplodeEvent event) {
             instance.debugMessage("ExplosionBlockDamage: event called");
 
             if (!isEnabled) {
@@ -73,7 +73,7 @@ public class ExplosionBlockDamageModule implements LittleModule {
                 return;
             }
 
-            if (!instance.isEnabledInList(getName(), moduleConfig, event.getBlock().getWorld().getName(), "worlds")) {
+            if (!instance.isEnabledInList(getName(), moduleConfig, event.getEntity().getWorld().getName(), "worlds")) {
                 instance.debugMessage("ExplosionBlockDamage: world not enabled");
                 return;
             }

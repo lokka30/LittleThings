@@ -74,7 +74,7 @@ public class FireSpreadModule implements LittleModule {
                 return;
             }
 
-            if (event.getBlock().getType() != Material.FIRE) {
+            if (event.getSource().getType() != Material.FIRE) {
                 instance.debugMessage("FireSpread: material not fire");
                 return;
             }

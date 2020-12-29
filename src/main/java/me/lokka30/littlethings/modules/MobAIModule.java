@@ -68,8 +68,6 @@ public class MobAIModule implements LittleModule {
     private class Listeners implements Listener {
         @EventHandler
         public void onEntitySpawn(final EntitySpawnEvent event) {
-            instance.debugMessage("MobAI: event called");
-
             if (!isEnabled) {
                 instance.debugMessage("MobAI: not enabled");
                 return;
@@ -78,7 +76,7 @@ public class MobAIModule implements LittleModule {
             Entity entity = event.getEntity();
 
             if (entity instanceof LivingEntity) {
-                instance.debugMessage("MobAI: yes, " + entity.getType().toString() + " = livingentity");
+                instance.debugMessage("MobAI: " + entity.getType().toString() + " is a livingentity");
                 LivingEntity livingEntity = (LivingEntity) entity;
 
                 if (!instance.isEnabledInList(getName(), moduleConfig, livingEntity.getType().toString(), "entities")) {
