@@ -1,5 +1,6 @@
 package me.lokka30.littlethings;
 
+import com.sun.istack.internal.NotNull;
 import me.lokka30.littlethings.commands.LTCommand;
 import me.lokka30.littlethings.modules.*;
 import me.lokka30.microlib.MicroLogger;
@@ -8,7 +9,7 @@ import org.bstats.bukkit.Metrics;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.File;
+import java.io.*;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -79,7 +80,7 @@ public class LittleThings extends JavaPlugin {
     }
 
     public void saveModuleConfigFile(String moduleName) {
-        saveResource("modules" + File.separator + moduleName + ".yml", false);
+        saveOuterResource(new File(getDataFolder().getPath() + File.separator + "modules"), "modules" + File.separator + moduleName + ".yml", false);
     }
 
     public boolean isEnabledInList(String moduleName, YamlConfiguration config, String item, String configPath) {
@@ -134,5 +135,44 @@ public class LittleThings extends JavaPlugin {
 
     private void saveLicense() {
         saveResource("license.txt", true);
+    }
+
+    //adapted version of Bukkit's saveResource method, allowing files outside of the data folder
+    public void saveOuterResource(File directory, @NotNull String resourcePath, boolean replace) {
+        if (resourcePath != null && !resourcePath.equals("")) {
+            resourcePath = resourcePath.replace('\\', '/');
+            InputStream in = this.getResource(resourcePath);
+            if (in == null) {
+                throw new IllegalArgumentException("The embedded resource '" + resourcePath + "' cannot be found");
+            } else {
+                File outFile = new File(directory, resourcePath);
+                int lastIndex = resourcePath.lastIndexOf(47);
+                File outDir = new File(directory, resourcePath.substring(0, Math.max(lastIndex, 0)));
+                if (!outDir.exists()) {
+                    outDir.mkdirs();
+                }
+
+                try {
+                    if (replace || !outFile.exists()) {
+                        OutputStream out = new FileOutputStream(outFile);
+                        byte[] buf = new byte[1024];
+
+                        int len;
+                        while ((len = in.read(buf)) > 0) {
+                            out.write(buf, 0, len);
+                        }
+
+                        out.close();
+                        in.close();
+                    }
+                } catch (IOException exception) {
+                    logger.error("Could not save " + outFile.getName() + " to " + outFile);
+                    exception.printStackTrace();
+                }
+
+            }
+        } else {
+            throw new IllegalArgumentException("ResourcePath cannot be null or empty");
+        }
     }
 }
