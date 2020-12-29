@@ -93,8 +93,6 @@ public class PiglinZombificationModule implements LittleModule {
                 }
 
                 instance.debugMessage("PiglinZombification: Is immune to zombification: " + shouldBeImmune);
-            } else {
-                instance.debugMessage("PiglinZombification: Entity '" + event.getEntityType().toString() + "' not instanceof PiglinAbstract.");
             }
         }
     }
