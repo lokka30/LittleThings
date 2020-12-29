@@ -1,6 +1,5 @@
 package me.lokka30.littlethings;
 
-import com.sun.istack.internal.NotNull;
 import me.lokka30.littlethings.commands.LTCommand;
 import me.lokka30.littlethings.modules.*;
 import me.lokka30.microlib.MicroLogger;
@@ -138,7 +137,7 @@ public class LittleThings extends JavaPlugin {
     }
 
     //adapted version of Bukkit's saveResource method, allowing files outside of the data folder
-    public void saveOuterResource(File directory, @NotNull String resourcePath, boolean replace) {
+    public void saveOuterResource(File directory, String resourcePath, boolean replace) {
         if (resourcePath != null && !resourcePath.equals("")) {
             resourcePath = resourcePath.replace('\\', '/');
             InputStream in = this.getResource(resourcePath);
