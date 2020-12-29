@@ -66,10 +66,8 @@ public class ExplosionBlockDamageModule implements LittleModule {
     private class Listeners implements Listener {
         @EventHandler
         public void onExplode(final EntityExplodeEvent event) {
-            instance.debugMessage("ExplosionBlockDamage: event called");
 
             if (!isEnabled) {
-                instance.debugMessage("ExplosionBlockDamage: not enabled");
                 return;
             }
 

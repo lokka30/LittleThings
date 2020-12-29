@@ -69,7 +69,6 @@ public class FireSpreadModule implements LittleModule {
         public void onSpread(final BlockSpreadEvent event) {
 
             if (!isEnabled) {
-                instance.debugMessage("FireSpread: not enabled");
                 return;
             }
 

@@ -69,14 +69,12 @@ public class MobAIModule implements LittleModule {
         @EventHandler
         public void onEntitySpawn(final EntitySpawnEvent event) {
             if (!isEnabled) {
-                instance.debugMessage("MobAI: not enabled");
                 return;
             }
 
             Entity entity = event.getEntity();
 
             if (entity instanceof LivingEntity) {
-                instance.debugMessage("MobAI: " + entity.getType().toString() + " is a livingentity");
                 LivingEntity livingEntity = (LivingEntity) entity;
 
                 if (!instance.isEnabledInList(getName(), moduleConfig, livingEntity.getType().toString(), "entities")) {

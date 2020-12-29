@@ -83,6 +83,7 @@ public class BlockGravityModule implements LittleModule {
                 return;
             }
 
+            instance.debugMessage("BlockGravity: Cancelling");
             event.setCancelled(true);
             event.getBlock().getState().update();
         }

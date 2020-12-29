@@ -76,6 +76,7 @@ public class DaylightCombustionModule implements LittleModule {
                 return;
             }
 
+            instance.debugMessage("DaylightCombustion: Cancelling");
             event.setCancelled(true);
         }
     }

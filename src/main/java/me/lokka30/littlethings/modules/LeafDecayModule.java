@@ -66,18 +66,17 @@ public class LeafDecayModule implements LittleModule {
     private class Listeners implements Listener {
         @EventHandler
         public void onDecay(final LeavesDecayEvent event) {
-            instance.debugMessage("LeafDecay: event called");
 
             if (!isEnabled) {
-                instance.debugMessage("LeafDecay: not enabled");
                 return;
             }
 
-            if (instance.isEnabledInList(getName(), moduleConfig, event.getBlock().getWorld().getName(), "worlds")) {
-                instance.debugMessage("LeafDecay: world enabled");
-                instance.debugMessage("LeafDecay: cancelling");
-                event.setCancelled(true);
+            if (!instance.isEnabledInList(getName(), moduleConfig, event.getBlock().getWorld().getName(), "worlds")) {
+                instance.debugMessage("LeafDecay: world disabled");
+                return;
             }
+
+            event.setCancelled(true);
         }
     }
 }
