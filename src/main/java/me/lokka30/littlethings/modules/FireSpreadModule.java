@@ -67,14 +67,13 @@ public class FireSpreadModule implements LittleModule {
     private class Listeners implements Listener {
         @EventHandler
         public void onSpread(final BlockSpreadEvent event) {
-            instance.debugMessage("FireSpread: event called");
 
             if (!isEnabled) {
                 instance.debugMessage("FireSpread: not enabled");
                 return;
             }
 
-            if (event.getSource().getType() != Material.FIRE) {
+            if (event.getSource().getType() != Material.FIRE && event.getBlock().getType() != Material.FIRE) {
                 instance.debugMessage("FireSpread: material not fire");
                 return;
             }
