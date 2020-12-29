@@ -65,10 +65,12 @@ public class FarmlandTramplingModule implements LittleModule {
         try {
             Material.valueOf("FARMLAND");
             farmlandMaterial = "FARMLAND";
+            instance.debugMessage("FarmlandTrampling: Farmland Material = 'FARMLAND'");
         } catch (IllegalArgumentException exception) {
             try {
                 Material.valueOf("SOIL");
                 farmlandMaterial = "SOIL";
+                instance.debugMessage("FarmlandTrampling: Farmland Material = 'SOIL'");
             } catch (IllegalArgumentException exception2) {
                 instance.debugMessage("FarmlandTrampling: unknown farmland material?");
                 instance.logger.error("LittleThings wasn't able to find the farmland material for your Minecraft version. Please report this issue, as crops will not be prevented from being trampled until this is fixed.");

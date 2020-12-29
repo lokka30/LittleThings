@@ -20,7 +20,7 @@ public class LittleThings extends JavaPlugin {
 
     private static LittleThings instance;
     public final MicroLogger logger = new MicroLogger("&b&lLittleThings: &7");
-    private final List<LittleModule> modules = Arrays.asList(new ArmorStandsModule(), new BlockGravityModule(), new DaylightCombustionModule(), new ExplosionBlockDamageModule(), new FarmlandTramplingModule(), new FireSpreadModule(), new LeafDecayModule(), new MobAIModule(), new PiglinZombificationModule(), new PortalTeleportModule());
+    private final List<LittleModule> modules = Arrays.asList(new ArmorStandsModule(), new BlockGravityModule(), new DaylightCombustionModule(), new ExplosionBlockDamageModule(), new FarmlandTramplingModule(), new LeafDecayModule(), new MobAIModule(), new PiglinZombificationModule(), new PortalTeleportModule());
 
     public static LittleThings getInstance() {
         return instance;
@@ -54,7 +54,7 @@ public class LittleThings extends JavaPlugin {
         logger.info("Loading modules...");
         modules.forEach(module -> {
             module.loadModule();
-            if (module.getInstalledConfigVersion() != module.getLatestConfigVersion()) {
+            if (module.isEnabled() && (module.getInstalledConfigVersion() != module.getLatestConfigVersion())) {
                 instance.logger.error("Module &b" + module.getName() + "&7's config has a mismatched version (outdated?). Please replace it as soon as possible else errors are highly likely to occur.");
             }
             logger.info("Loaded module &b" + module.getName() + "&7 with status &b" + (module.isEnabled() ? "enabled" : "disabled") + "&7.");
