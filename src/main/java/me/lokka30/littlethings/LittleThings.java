@@ -4,11 +4,12 @@ import me.lokka30.littlethings.commands.LTCommand;
 import me.lokka30.littlethings.modules.*;
 import me.lokka30.microlib.MicroLogger;
 import me.lokka30.microlib.QuickTimer;
+import me.lokka30.microlib.UpdateChecker;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.*;
+import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -39,6 +40,7 @@ public class LittleThings extends JavaPlugin {
         logger.info("Running misc methods...");
         startMetrics();
         saveLicense();
+        checkForUpdates();
 
         logger.info("&f~ Plugin enabled successfully, took &b" + timer.getTimer() + "ms&f ~");
     }
@@ -53,9 +55,9 @@ public class LittleThings extends JavaPlugin {
         modules.forEach(module -> {
             module.loadModule();
             if (module.getInstalledConfigVersion() != module.getLatestConfigVersion()) {
-                instance.logger.error("Module &b" + getName() + "&7's config has a mismatched version (outdated?). Please replace it as soon as possible else errors are highly likely to occur.");
+                instance.logger.error("Module &b" + module.getName() + "&7's config has a mismatched version (outdated?). Please replace it as soon as possible else errors are highly likely to occur.");
             }
-            logger.info("Loaded module &b" + module + "&7 with status &b" + (module.isEnabled() ? "enabled" : "disabled") + "&7.");
+            logger.info("Loaded module &b" + module.getName() + "&7 with status &b" + (module.isEnabled() ? "enabled" : "disabled") + "&7.");
         });
     }
 
@@ -81,7 +83,6 @@ public class LittleThings extends JavaPlugin {
 
     public void saveModuleConfigFile(String moduleName) {
         saveResource("modules" + File.separator + moduleName + ".yml", false);
-        //TODO saveOuterResource(new File(getDataFolder().getPath() + File.separator + "modules"), "modules" + File.separator + moduleName + ".yml", false);
     }
 
     public boolean isEnabledInList(String moduleName, YamlConfiguration config, String item, String configPath) {
@@ -138,42 +139,17 @@ public class LittleThings extends JavaPlugin {
         saveResource("license.txt", true);
     }
 
-    //adapted version of Bukkit's saveResource method, allowing files outside of the data folder
-    public void saveOuterResource(File directory, String resourcePath, boolean replace) {
-        if (resourcePath != null && !resourcePath.equals("")) {
-            resourcePath = resourcePath.replace('\\', '/');
-            InputStream in = this.getResource(resourcePath);
-            if (in == null) {
-                throw new IllegalArgumentException("The embedded resource '" + resourcePath + "' cannot be found");
-            } else {
-                File outFile = new File(directory, resourcePath);
-                int lastIndex = resourcePath.lastIndexOf(47);
-                File outDir = new File(directory, resourcePath.substring(0, Math.max(lastIndex, 0)));
-                if (!outDir.exists()) {
-                    outDir.mkdirs();
-                }
-
-                try {
-                    if (replace || !outFile.exists()) {
-                        OutputStream out = new FileOutputStream(outFile);
-                        byte[] buf = new byte[1024];
-
-                        int len;
-                        while ((len = in.read(buf)) > 0) {
-                            out.write(buf, 0, len);
-                        }
-
-                        out.close();
-                        in.close();
-                    }
-                } catch (IOException exception) {
-                    logger.error("Could not save " + outFile.getName() + " to " + outFile);
-                    exception.printStackTrace();
-                }
-
-            }
-        } else {
-            throw new IllegalArgumentException("ResourcePath cannot be null or empty");
+    private void checkForUpdates() {
+        if (!getConfig().getBoolean("check-for-updates")) {
+            return;
         }
+
+        UpdateChecker updateChecker = new UpdateChecker(this, 84163);
+        String currentVersion = updateChecker.getCurrentVersion();
+        updateChecker.getLatestVersion(latestVersion -> {
+            if (!currentVersion.equals(latestVersion)) {
+                logger.warning("An update is available on the SpigotMC resource page. You are running &bv" + currentVersion + "&7, new version is &bv" + latestVersion + "&7.");
+            }
+        });
     }
 }
