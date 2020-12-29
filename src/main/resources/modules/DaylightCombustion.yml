@@ -1,0 +1,18 @@
+# Daylight Combustion module for LittleThings
+# This module stops certain entities from burning in the daylight.
+enabled: false
+
+# What entities should not burn in the daylight?
+entities:
+  all: true # true = all entities, ignore what's below
+  mode: WHITELIST
+  list: [ ZOMBIE, SKELETON, PHANTOM ]
+
+# What worlds should be affected?
+worlds:
+  all: true # true = all worlds, ignore what's below
+  mode: WHITELIST
+  list: [ 'world', 'world_nether', 'world_the_end' ]
+
+# Don't change this unless you know what you're doing
+file-version: 1

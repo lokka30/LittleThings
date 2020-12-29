@@ -1,114 +1,138 @@
 package me.lokka30.littlethings;
 
 import me.lokka30.littlethings.commands.LTCommand;
-import me.lokka30.littlethings.listeners.*;
+import me.lokka30.littlethings.modules.*;
 import me.lokka30.microlib.MicroLogger;
+import me.lokka30.microlib.QuickTimer;
 import org.bstats.bukkit.Metrics;
-import org.bukkit.event.Listener;
-import org.bukkit.plugin.PluginManager;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-public class LittleThings extends JavaPlugin implements Listener {
+public class LittleThings extends JavaPlugin {
 
+    // I apologise for the mess in this class. Might clean it up later :)
+
+    private static LittleThings instance;
     public final MicroLogger logger = new MicroLogger("&b&lLittleThings: &7");
+    private final List<LittleModule> modules = Arrays.asList(new ArmorStandsModule(), new BlockGravityModule(), new DaylightCombustionModule(), new ExplosionBlockDamageModule(), new FarmlandTramplingModule(), new FireSpreadModule(), new LeafDecayModule(), new MobAIModule(), new PiglinZombificationModule(), new PortalTeleportModule());
+
+    public static LittleThings getInstance() {
+        return instance;
+    }
 
     @Override
     public void onEnable() {
-        final long startTime = System.currentTimeMillis();
+        instance = this;
+        final QuickTimer timer = new QuickTimer();
+        timer.start();
+        logger.info("&f~ Plugin starting up ~");
 
-        logger.info("Loading files...");
         loadFiles();
-
-        logger.info("Registering listeners...");
-        registerListeners();
-
-        logger.info("Registering commands...");
+        loadModules();
         registerCommands();
 
-        logger.info("Registering bStats metrics...");
-        registerMetrics();
+        logger.info("Running misc methods...");
+        startMetrics();
+        saveLicense();
 
-        final long duration = System.currentTimeMillis() - startTime;
-        logger.info("&fPlugin enabled successfully. &8(&7took &b" + duration + "ms&8)&r");
+        logger.info("&f~ Plugin enabled successfully, took &b" + timer.getTimer() + "ms&f ~");
     }
 
     @Override
     public void onDisable() {
-        logger.info("Plugin disabled.");
+        logger.info("&f~ Plugin shut down successfully ~");
     }
 
-    private void loadFiles() {
-        saveIfNotExists("config.yml");
-        saveIfNotExists("license.txt");
-        if (getConfig().getInt("file-version") != 6) {
-            logger.warning("Your config.yml file is not the correct version (outdated?). Reset the file or merge your current file, else errors may occur.");
-        }
+    private void loadModules() {
+        logger.info("Loading modules...");
+        modules.forEach(module -> {
+            module.loadModule();
+            if (module.getInstalledConfigVersion() != module.getLatestConfigVersion()) {
+                instance.logger.error("Module &b" + getName() + "&7's config has a mismatched version (outdated?). Please replace it as soon as possible else errors are highly likely to occur.");
+            }
+            logger.info("Loaded module &b" + module + "&7 with status &b" + (module.isEnabled() ? "enabled" : "disabled") + "&7.");
+        });
     }
 
-    private void saveIfNotExists(String fileName) {
-        if (!(new File(getDataFolder(), fileName).exists())) {
-            logger.info("File '&b" + fileName + "&7' didn't exist, generating it...");
-            saveResource(fileName, false);
-        }
+    public void reloadModules() {
+        logger.info("Reloading modules...");
+        modules.forEach(module -> {
+            module.reloadModule();
+            if (module.getInstalledConfigVersion() != module.getLatestConfigVersion()) {
+                instance.logger.error("Module &b" + getName() + "&7's config has a mismatched version (outdated?). Please replace it as soon as possible else errors are highly likely to occur.");
+            }
+            logger.info("Reloaded module &b" + module + "&7 with status &b" + (module.isEnabled() ? "enabled" : "disabled") + "&7.");
+        });
     }
 
-    private void registerListeners() {
-        final PluginManager pluginManager = getServer().getPluginManager();
-
-        pluginManager.registerEvents(new MobAI(this), this);
-        pluginManager.registerEvents(new ModifyArmorStands(this), this);
-        pluginManager.registerEvents(new StopBlockGravity(this), this);
-        pluginManager.registerEvents(new StopDaylightCombustion(this), this);
-        pluginManager.registerEvents(new StopExplosionsBlockDamage(this), this);
-        pluginManager.registerEvents(new StopFarmlandTrampling(this), this);
-        pluginManager.registerEvents(new StopFireSpread(this), this);
-        pluginManager.registerEvents(new StopLeafDecay(this), this);
-        pluginManager.registerEvents(new StopPiglinOverworldZombification(this), this);
+    public String getModulesFolderPath() {
+        return getDataFolder() + File.separator + "modules" + File.separator;
     }
 
-    private void registerCommands() {
-        Objects.requireNonNull(getCommand("littlethings")).setExecutor(new LTCommand(this));
+    public File getModuleConfigFile(String moduleName) {
+        return new File(getModulesFolderPath() + moduleName + ".yml");
     }
 
-    private void registerMetrics() {
-        new Metrics(this, 8934);
+    public void saveModuleConfigFile(String moduleName) {
+        saveResource("modules" + File.separator + moduleName + ".yml", false);
     }
 
-    public boolean isModuleEnabled(String configPath) {
-        configPath = configPath + ".enabled";
-
-        if (getConfig().contains(configPath)) {
-            return getConfig().getBoolean(configPath);
-        } else {
-            return false;
-        }
-    }
-
-    public boolean isEnabledInList(String item, String configPath) {
-        if (getConfig().getBoolean(configPath + ".all")) {
+    public boolean isEnabledInList(String moduleName, YamlConfiguration config, String item, String configPath) {
+        if (config.getBoolean(configPath + ".all")) {
             return true;
         } else {
-            List<String> list = getConfig().getStringList(configPath + ".list");
-            String mode = Objects.requireNonNull(getConfig().getString(configPath + ".mode")).toUpperCase();
+            List<String> list = config.getStringList(configPath + ".list");
+            String mode = Objects.requireNonNull(config.getString(configPath + ".mode")).toUpperCase();
             switch (mode) {
                 case "WHITELIST":
                     return list.contains(item);
                 case "BLACKLIST":
                     return !list.contains(item);
                 default:
-                    logger.error("Invalid list mode in config.yml at path='" + configPath + ".mode', must be either 'WHITELIST' or 'BLACKLIST'! This module will not work properly until this is fixed!");
+                    logger.error("Invalid list mode in module &b" + moduleName + "&7's config at path='" + configPath + ".mode', must be either 'WHITELIST' or 'BLACKLIST'! This module will not work properly until this is fixed!");
                     return false;
             }
         }
+    }
+
+    public boolean isOneSixteen() {
+        try {
+            Class.forName("org.bukkit.entity.PiglinAbstract");
+        } catch (ClassNotFoundException e) {
+            return false;
+        }
+        return true;
     }
 
     public void debugMessage(String message) {
         if (getConfig().contains("debug") && getConfig().getBoolean("debug")) {
             logger.info("&8[DEBUG] &7" + message);
         }
+    }
+
+    private void loadFiles() {
+        logger.info("Loading files...");
+        saveDefaultConfig();
+        if (getConfig().getInt("file-version") != 7) {
+            logger.error("File version mismatch for config.yml, reset / update the config file as soon as possible.");
+        }
+    }
+
+    private void registerCommands() {
+        logger.info("Registering commands...");
+        Objects.requireNonNull(getCommand("littlethings")).setExecutor(new LTCommand(this));
+    }
+
+    private void startMetrics() {
+        new Metrics(this, 8934);
+    }
+
+    private void saveLicense() {
+        saveResource("license.txt", true);
     }
 }

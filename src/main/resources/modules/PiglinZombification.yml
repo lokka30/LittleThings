@@ -1,0 +1,13 @@
+# Piglin Zombification module for LittleThings
+# For 1.16+ servers only!
+# This module will stop piglins from being zombified when teleporting into the overworld.
+enabled: false
+
+# What worlds should be affected?
+worlds:
+  all: true # true = all worlds, ignore what's below
+  mode: WHITELIST
+  list: [ 'world', 'world_nether', 'world_the_end' ]
+
+# Don't change this unless you know what you're doing
+file-version: 1

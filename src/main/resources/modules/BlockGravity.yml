@@ -1,0 +1,18 @@
+# Block Gravity module for LittleThings
+# This module stops certain blocks from having gravity (e.g. falling sand).
+enabled: false
+
+# What materials should not have gravity?
+materials:
+  all: true # true = all materials, ignore what's below
+  mode: WHITELIST
+  list: [ 'SAND', 'RED_SAND', 'GRAVEL', 'WHITE_CONCRETE_POWDER', 'LIGHT_BLUE_CONCRETE_POWDER' ]
+
+# What worlds should the module affect?
+worlds:
+  all: true # true = all worlds, ignore what's below
+  mode: WHITELIST
+  list: [ 'world', 'world_nether', 'world_the_end' ]
+
+# Don't change this unless you know what you're doing
+file-version: 1

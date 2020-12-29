@@ -1,0 +1,20 @@
+# Mob AI module for LittleThings
+# This module will stop certain entities from having AI. You can increase your server's performance doing so, especially for entities that don't serve much purpose.
+enabled: false
+
+# Note: changing settings here will only apply to newly spawned entities, not existing entities.
+
+# What entities should not have AI?
+entities:
+  all: false # true = all entities, ignore what's below
+  mode: WHITELIST
+  list: [ SQUID, COD, SALMON, PUFFERFISH, TROPICAL_FISH, BAT ]
+
+# What worlds should be affected?
+worlds:
+  all: true # true = all worlds, ignore what's below
+  mode: WHITELIST
+  list: [ 'world', 'world_nether', 'world_the_end' ]
+
+# Don't change this unless you know what you're doing
+file-version: 1

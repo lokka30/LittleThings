@@ -36,7 +36,6 @@ public class LTCommand implements TabExecutor {
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (sender.hasPermission("littlethings.command")) {
             if (args.length == 0) {
-
                 getColoredListFromConfig("messages.main").forEach(message -> {
                     message = message.replace("%label%", label);
                     message = message.replace("%version%", instance.getDescription().getVersion());
@@ -47,6 +46,7 @@ public class LTCommand implements TabExecutor {
                 if (sender.hasPermission("littlethings.reload")) {
                     getColoredListFromConfig("messages.reload.start").forEach(sender::sendMessage);
                     instance.reloadConfig();
+                    instance.reloadModules();
                     getColoredListFromConfig("messages.reload.finish").forEach(sender::sendMessage);
                 } else {
                     getColoredListFromConfig("messages.no-permission").forEach(sender::sendMessage);

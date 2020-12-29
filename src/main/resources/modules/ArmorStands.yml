@@ -1,0 +1,23 @@
+# Armor Stands modification module for LittleThings
+# This module allows you to modify if armor stands spawn with arms and/or base plates.
+enabled: false
+
+# Note: Changes to this configuration will not affect existing armor stands.
+
+# What modifications should be made to armor stands?
+modifications:
+
+  # Should they have arms?
+  arms: false
+
+  # Should they have a base plate?
+  base-plate: true
+
+# In what worlds should armor stands be affected?
+worlds:
+  all: true # true = all worlds, ignore what's below
+  mode: WHITELIST
+  list: [ 'world', 'world_nether', 'world_the_end' ]
+
+# Don't change this unless you know what you're doing
+file-version: 1

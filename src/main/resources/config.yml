@@ -1,107 +1,3 @@
-# For configuration changes to take effect, ensure you have saved this file, then restart your server.
-
-# You can enable/disable arms and base plates of armor stands here. Will only affect new armorstands.
-modify-armor-stands:
-  enabled: false
-  modifications:
-    arms: false
-    base-plate: true
-  worlds:
-    all: true # true = ignore worlds list below
-    mode: WHITELIST
-    list: [ 'world', 'world_nether', 'world_the_end' ]
-
-# Stop explosions from destroying blocks. (They will still damage entities!)
-stop-explosions-block-damage:
-  enabled: false
-  worlds:
-    all: true # true = ignore worlds list below
-    mode: WHITELIST
-    list: [ 'world', 'world_nether', 'world_the_end' ]
-
-# Stop fires from spreading. (They will still ignite!)
-stop-fire-spread:
-  enabled: false
-  worlds:
-    all: true # true = ignore worlds list below
-    mode: WHITELIST
-    list: [ 'world', 'world_nether', 'world_the_end' ]
-
-# Stop leaves from decaying.
-stop-leaf-decay:
-  enabled: false
-  worlds:
-    all: true # true = ignore worlds list below
-    mode: WHITELIST
-    list: [ 'world', 'world_nether', 'world_the_end' ]
-
-# Which entity types should spawn with no AI?
-# Helps with server performance, especially to add the useless mobs in.
-no-mob-ai:
-  enabled: false
-  entities:
-    all: false # true = ignore entities list below
-    mode: WHITELIST
-    list: [ SQUID, COD, SALMON, PUFFERFISH, TROPICAL_FISH, BAT ]
-  worlds:
-    all: true # true = ignore worlds list below
-    mode: WHITELIST
-    list: [ 'world', 'world_nether', 'world_the_end' ]
-
-
-# Stop mobs from burning in daylight.
-stop-daylight-combustion:
-  enabled: false
-  entities:
-    all-entities: true # true = ignore entities list below
-    mode: WHITELIST
-    list: [ ZOMBIE, SKELETON, PHANTOM ]
-  worlds:
-    all: true # true = ignore worlds list below
-    mode: WHITELIST
-    list: [ 'world', 'world_nether', 'world_the_end' ]
-
-# In 1.16+, when piglins teleport to the overworld, they become zombified.
-# This feature allows you to stop this from happening.
-stop-piglin-overworld-zombification:
-  enabled: false
-  worlds:
-    all: true # true = ignore worlds list below
-    mode: WHITELIST
-    list: [ 'world', 'world_nether', 'world_the_end' ]
-
-# Here, you can stop crops from being trampled by entities.
-stop-crop-trampling:
-  enabled: false
-  worlds:
-    all: true # true = ignore worlds list below
-    mode: WHITELIST
-    list: [ 'world', 'world_nether', 'world_the_end' ]
-
-# Here, you can stop blocks from falling (e.g. sand and gravel)
-stop-block-gravity:
-  enabled: false
-  worlds:
-    all: true # true = ignore worlds list below
-    mode: WHITELIST
-    list: [ 'world', 'world_nether', 'world_the_end' ]
-  materials: # What materials should be blocked?
-    all: true # true = ignore materials list below
-    mode: WHITELIST
-    list: [ 'SAND', 'RED_SAND', 'GRAVEL', 'WHITE_CONCRETE_POWDER', 'LIGHT_BLUE_CONCRETE_POWDER' ]
-
-# Here, you can disable portals from teleporting players. You can still place them and use them otherwise.
-stop-portal-teleport:
-  enabled: false
-  worlds: # In what worlds are players prevented from teleporting through portals?
-    all: true # true = ignore worlds list below
-    mode: WHITELIST
-    list: [ 'world', 'another_world' ]
-  portals: # In what portals are players prevented from teleporting through?
-    all: true
-    mode: WHITELIST
-    list: [ 'END_PORTAL', 'NETHER_PORTAL' ]
-
 # You can customise the chat messages the plugin sends here. :)
 messages:
 
@@ -136,5 +32,8 @@ messages:
 # Send debug spam into the console?
 debug: false
 
+# Check for updates on startup? Will warn console once if there is a new version available. (Async too!)
+check-for-updates: true
+
 # Do not change this unless you know what you are doing.
-file-version: 6
+file-version: 7
