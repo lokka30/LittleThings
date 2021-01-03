@@ -1,0 +1,15 @@
+# Iron Golem Zombie Villager module for LittleThings
+# This module will stop iron golems from harming zombie villagers.
+enabled: false
+
+# Does the Zombie Villager need to be in the process of conversion in order to have immunity from Iron Golems?
+mustBeConverting: true
+
+# What worlds should be affected?
+worlds:
+  all: true # true = all worlds, ignore what's below
+  mode: WHITELIST
+  list: [ 'world', 'world_nether', 'world_the_end' ]
+
+# Don't change this unless you know what you're doing
+file-version: 1

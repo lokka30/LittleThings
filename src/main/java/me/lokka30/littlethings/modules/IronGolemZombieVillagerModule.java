@@ -3,18 +3,18 @@ package me.lokka30.littlethings.modules;
 import me.lokka30.littlethings.LittleModule;
 import me.lokka30.littlethings.LittleThings;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.ZombieVillager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityChangeBlockEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 import java.io.File;
 
-public class FarmlandTramplingModule implements LittleModule {
+public class IronGolemZombieVillagerModule implements LittleModule {
 
     public boolean isEnabled;
-    String farmlandMaterial;
     private LittleThings instance;
     private YamlConfiguration moduleConfig;
 
@@ -25,7 +25,7 @@ public class FarmlandTramplingModule implements LittleModule {
 
     @Override
     public String getName() {
-        return "FarmlandTrampling";
+        return "IronGolemZombieVillager";
     }
 
     @Override
@@ -57,26 +57,7 @@ public class FarmlandTramplingModule implements LittleModule {
     public void loadModule() {
         instance = LittleThings.getInstance();
         loadConfig();
-        loadFarmlandMaterial();
         Bukkit.getPluginManager().registerEvents(new Listeners(), LittleThings.getInstance());
-    }
-
-    private void loadFarmlandMaterial() {
-        try {
-            Material.valueOf("FARMLAND");
-            farmlandMaterial = "FARMLAND";
-            instance.debugMessage("FarmlandTrampling: Farmland Material = 'FARMLAND'");
-        } catch (IllegalArgumentException exception) {
-            try {
-                Material.valueOf("SOIL");
-                farmlandMaterial = "SOIL";
-                instance.debugMessage("FarmlandTrampling: Farmland Material = 'SOIL'");
-            } catch (IllegalArgumentException exception2) {
-                instance.debugMessage("FarmlandTrampling: unknown farmland material?");
-                instance.logger.error("LittleThings wasn't able to find the farmland material for your Minecraft version. Please report this issue, as crops will not be prevented from being trampled until this is fixed.");
-                isEnabled = false;
-            }
-        }
     }
 
     @Override
@@ -86,19 +67,35 @@ public class FarmlandTramplingModule implements LittleModule {
 
     private class Listeners implements Listener {
         @EventHandler
-        public void onTrample(final EntityChangeBlockEvent event) {
+        public void onDamage(final EntityDamageByEntityEvent event) {
             if (!isEnabled) {
                 return;
             }
 
-            if (event.getTo() == Material.DIRT && event.getBlock().getType().toString().equals(farmlandMaterial)) {
-                instance.debugMessage("FarmlandTrampling: farmland > dirt");
+            // Check if defender is a zombie villager.
+            if (event.getEntity().getType() != EntityType.ZOMBIE_VILLAGER) {
+                return;
+            }
 
-                if (instance.isEnabledInList(getName(), moduleConfig, event.getEntity().getWorld().getName(), "worlds")) {
-                    instance.debugMessage("FarmlandTrampling: world is enabled. cancelling trample by entity.");
+            // Check if attacker is an iron golem.
+            if (event.getDamager().getType() != EntityType.IRON_GOLEM) {
+                return;
+            }
 
+            // Make sure that the world is enabled in the module config.
+            if (!instance.isEnabledInList(getName(), moduleConfig, event.getEntity().getWorld().getName(), "worlds")) {
+                instance.debugMessage("IronGolemZombieVillager: world disabled");
+                return;
+            }
+
+            ZombieVillager zombieVillager = (ZombieVillager) event.getEntity();
+
+            if (moduleConfig.getBoolean("mustBeConverting")) {
+                if (zombieVillager.isConverting()) {
                     event.setCancelled(true);
                 }
+            } else {
+                event.setCancelled(true);
             }
         }
     }

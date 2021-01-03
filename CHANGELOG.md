@@ -110,3 +110,13 @@
   * I would like to add that no modules have been added in this update, they will be coming in the next updates. This update was to just implement this system early on before more things are added.
 * Unfortunately, I had to remove a feature:
   * Removed fire spread prevention. Unfortunately I was not able to find how to fix this feature for a decent period of searching. For now, `/gamerule doFireTick` achieves similar functionality.
+  
+  
+  
+## v2.1.0
+### Notes:
+* No changes to existing configurations. A new module was added and its configuration file will be generated automatically.
+* This update was **not tested**, you are advised to test this version before deploying it on a production server.
+
+### Changelog:
+* Added a new module 'IronGolemZombieVillager' which provides immunity to zombie villagers if they are being attacked by iron golems. By default, it is configured to only provide immunity if the zombie villager is converting. Thanks to UltimaOath for suggesting this feature!

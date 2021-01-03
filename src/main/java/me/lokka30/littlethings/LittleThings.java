@@ -20,7 +20,7 @@ public class LittleThings extends JavaPlugin {
 
     private static LittleThings instance;
     public final MicroLogger logger = new MicroLogger("&b&lLittleThings: &7");
-    private final List<LittleModule> modules = Arrays.asList(new ArmorStandsModule(), new BlockGravityModule(), new DaylightCombustionModule(), new ExplosionBlockDamageModule(), new FarmlandTramplingModule(), new LeafDecayModule(), new MobAIModule(), new PiglinZombificationModule(), new PortalTeleportModule());
+    private final List<LittleModule> modules = Arrays.asList(new ArmorStandsModule(), new BlockGravityModule(), new DaylightCombustionModule(), new ExplosionBlockDamageModule(), new FarmlandTramplingModule(), new IronGolemZombieVillagerModule(), new LeafDecayModule(), new MobAIModule(), new PiglinZombificationModule(), new PortalTeleportModule());
 
     public static LittleThings getInstance() {
         return instance;
