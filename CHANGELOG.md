@@ -129,4 +129,4 @@
 * This update was tested prior to release.
 
 ### Changelog:
-* Fixed the DaylightCombustion module - thank @Gadse and @StealingDaPanda for helping me out [here](https://www.spigotmc.org/threads/stop-mobs-from-burning-in-daylight.481610/#post-4046516), and @Noiverre for reporting that it was broken (and their patience!).
+* Fixed the DaylightCombustion module - thank @Gadse and @StealingDaPenta for helping me out [here](https://www.spigotmc.org/threads/stop-mobs-from-burning-in-daylight.481610/#post-4046516), and @Noiverre for reporting that it was broken (and their patience!).
