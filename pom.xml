@@ -6,7 +6,7 @@
 
     <groupId>me.lokka30</groupId>
     <artifactId>LittleThings</artifactId>
-    <version>2.1.0</version>
+    <version>2.1.1</version>
 
     <name>LittleThings</name>
     <description>A SpigotMC plugin that adds configurable options to manipulate certain events.</description>

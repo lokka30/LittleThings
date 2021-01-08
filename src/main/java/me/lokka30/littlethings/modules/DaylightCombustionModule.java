@@ -3,12 +3,19 @@ package me.lokka30.littlethings.modules;
 import me.lokka30.littlethings.LittleModule;
 import me.lokka30.littlethings.LittleThings;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityCombustByBlockEvent;
+import org.bukkit.event.entity.EntityCombustByEntityEvent;
 import org.bukkit.event.entity.EntityCombustEvent;
+import org.bukkit.inventory.EntityEquipment;
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.List;
 
 public class DaylightCombustionModule implements LittleModule {
 
@@ -74,6 +81,28 @@ public class DaylightCombustionModule implements LittleModule {
             }
             if (!instance.isEnabledInList(getName(), moduleConfig, event.getEntity().getWorld().getName(), "worlds")) {
                 return;
+            }
+
+            // Credit to SpigotMC users Gadse and StealingDaPanda: https://www.spigotmc.org/threads/stop-mobs-from-burning-in-daylight.481610/#post-4044537
+            if (event instanceof EntityCombustByBlockEvent || event instanceof EntityCombustByEntityEvent) {
+                instance.debugMessage("DaylightCombustion: Event instanceof ECBBE or ECBEE (not daylight combustion), skipping");
+                return;
+            }
+
+            // Make sure that the entity at hand can burn in the sunlight
+            List<String> entityTypesCanBurnInSunlight = Arrays.asList("SKELETON", "ZOMBIE", "ZOMBIE_VILLAGER", "STRAY", "DROWNED", "PHANTOM");
+            if (!entityTypesCanBurnInSunlight.contains(event.getEntity().getType().toString())) {
+                instance.debugMessage("DaylightCombustion: Mob is not burnable by sunlight, skipping");
+                return;
+            }
+
+            if (event.getEntity() instanceof LivingEntity) {
+                EntityEquipment equipment = ((LivingEntity) event.getEntity()).getEquipment();
+
+                if (equipment != null && equipment.getHelmet() != null && equipment.getHelmet().getType() != Material.AIR) {
+                    instance.debugMessage("DaylightCombus ion: Mob has a helmet (which prevents them from burning from daylight), skipping");
+                    return;
+                }
             }
 
             instance.debugMessage("DaylightCombustion: Cancelling");

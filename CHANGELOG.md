@@ -51,7 +51,7 @@
 
 ## v1.2.5
 * Minor change, update not required. Moved logging to MicroLib's MicroLogger. You do not need to install MicroLib, as LittleThings has it shaded inside its .jar file.
-  * This was mainly done to make sure that MicroLib v2 is working properly. :)
+  * This was mainly done to make sure MicroLib v2 is working properly. :)
   
   
   
@@ -68,7 +68,7 @@
     * Includes tab completion.
     * New permissions for the command:
       * `littlethings.command` is required to run the command, given to all users by default
-      * `littlethings.reload` is required to run the reload subcommand, given to operators by default
+      * `littlethings.reload` is required to run the 'reload' subcommand, given to operators by default
     * Customisable messages are on the to-do list.
 * Moved all listeners to separate classes. Far cleaner code now :)
 * Fixed StopFarmlandTrampling material error logging using Bukkit's logger instead of MicroLogger
@@ -100,7 +100,7 @@
 * This update was **tested** quite thoroughly, although I recommend you quickly test the modules you will use on a separate server to ensure the plugin is working properly.
 
 ### Changelog:
-* You may wonder why the sudden jump in version... well, I've completely overhauled the plugin behind-the-scenes! :)
+* You may wonder why the sudden jump in the version: I've completely overhauled the plugin behind-the-scenes! :)
   * A new module system has been installed which separates features into different configurations so that you can easily tell LittleThings what to do and what not to.
   * This means that you no longer have a cluttered `config.yml` file. Simply find the module you want to enable or configure, and boom! No need to search through the entire file for the feature you want to configure.
   * This also means that you no longer have to worry about constantly updating your config each time I make a change to a module's configuration. If you don't use the module, you can ignore it. Each module's config has its own file-version system.
@@ -120,3 +120,13 @@
 
 ### Changelog:
 * Added a new module 'IronGolemZombieVillager' which provides immunity to zombie villagers if they are being attacked by iron golems. By default, it is configured to only provide immunity if the zombie villager is converting. Thanks to UltimaOath for suggesting this feature!
+
+
+
+## v2.1.1
+### Notes:
+* No configuration changes.
+* This update was tested prior to release.
+
+### Changelog:
+* Fixed the DaylightCombustion module - thank @Gadse and @StealingDaPanda for helping me out [here](https://www.spigotmc.org/threads/stop-mobs-from-burning-in-daylight.481610/#post-4046516), and @Noiverre for reporting that it was broken (and their patience!).
