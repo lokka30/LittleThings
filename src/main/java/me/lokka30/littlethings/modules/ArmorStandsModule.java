@@ -74,8 +74,8 @@ public class ArmorStandsModule implements LittleModule {
 
                 if (entity.getType() == EntityType.ARMOR_STAND && instance.isEnabledInList(getName(), moduleConfig, entity.getWorld().getName(), "worlds")) {
                     ArmorStand armorStand = (ArmorStand) entity;
-                    armorStand.setArms(instance.getConfig().getBoolean("modifications.arms"));
-                    armorStand.setBasePlate(instance.getConfig().getBoolean("modifications.base-plate"));
+                    armorStand.setArms(moduleConfig.getBoolean("modifications.arms"));
+                    armorStand.setBasePlate(moduleConfig.getBoolean("modifications.base-plate"));
                     instance.debugMessage("ArmorStands: Modified");
                 }
             }
