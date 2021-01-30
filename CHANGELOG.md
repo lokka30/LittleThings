@@ -150,3 +150,17 @@
 
 **New: Plant Growth Module!**
 * Another request by @Oathkeeper! This allows you to stop plants and turtle eggs from growing.
+
+***
+
+## v2.2.1
+### Notes:
+* No file changes.
+* This update was tested prior to release.
+
+### Changelog:
+**Bug Fix**
+* Fixed armor stands module checking the wrong config. Arms and base plate settings will work now :)
+
+***
+
