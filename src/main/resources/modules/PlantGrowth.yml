@@ -1,0 +1,18 @@
+# Plant Growth module for LittleThings
+# This module will stop plants from growing. It can also affect other blocks such as turtle eggs from growing.
+enabled: false
+
+# What materials (plants/blocks) should not grow?
+materials:
+  all: false # true = all materials, ignore what's below
+  mode: WHITELIST
+  list: [ 'SUGAR_CANE', 'CACTUS', 'WHEAT' ] # Add your own here.
+
+# What worlds should be affected?
+worlds:
+  all: true # true = all worlds, ignore what's below
+  mode: WHITELIST
+  list: [ 'world', 'world_nether', 'world_the_end' ]
+
+# Don't change this unless you know what you're doing
+file-version: 1

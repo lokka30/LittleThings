@@ -1,0 +1,25 @@
+# Falling Blocks module for LittleThings
+# This module will make blocks fall / have gravity, just like sand and gravel.
+
+# ***** WARNING *****
+# This module has not been tested extensively and may cause significant damage to your worlds.
+# I (lokka30) would NOT recommend enabling this module unless you don't mind your world being possibly
+# ruined.
+enabled: false
+
+# What worlds should be affected?
+worlds:
+  all: true # true = all worlds, ignore what's below
+  mode: WHITELIST
+  list: [ 'world', 'world_nether', 'world_the_end' ]
+
+materials:
+  all: false
+  mode: WHITELIST
+  list: [ 'COBBLESTONE', 'BRICKS' ]
+
+falling-blocks-per-tick: 50
+ignore-caves: true
+
+# Don't change this unless you know what you're doing
+file-version: 1

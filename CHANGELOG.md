@@ -130,3 +130,23 @@
 
 ### Changelog:
 * Fixed the DaylightCombustion module - thank @Gadse and @StealingDaPenta for helping me out [here](https://www.spigotmc.org/threads/stop-mobs-from-burning-in-daylight.481610/#post-4046516), and @Noiverre for reporting that it was broken (and their patience!).
+
+***
+
+## v2.2.0
+### Notes:
+* No `config.yml` changes.
+* This update was tested prior to release.
+
+### Changelog:
+**New: Dragon Egg Break Module!**
+* This module allows users to break the dragon egg using their bare hands.
+* Thanks to @Oathkeeper for requesting this :)
+
+**New: Falling Blocks Module!**
+* Developed by Hugo5551 and requested by @Oathkeeper, this module can make any block fall like sand!
+* **I would not recommend using this module** as it could cause significant damage to the worlds you enable it on. Regardless, enable it if you want to play around with it. Be careful :)
+* Chests have been force-disabled although other containers such as Shulkers are functional.
+
+**New: Plant Growth Module!**
+* Another request by @Oathkeeper! This allows you to stop plants and turtle eggs from growing.

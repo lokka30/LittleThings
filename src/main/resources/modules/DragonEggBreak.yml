@@ -1,0 +1,12 @@
+# Dragon Egg Break module for LittleThings
+# This module will stop the dragon egg from teleporting and thus allow it to be broken with a tool.
+enabled: false
+
+# What worlds should be affected?
+worlds:
+  all: true # true = all worlds, ignore what's below
+  mode: WHITELIST
+  list: [ 'world', 'world_nether', 'world_the_end' ]
+
+# Don't change this unless you know what you're doing
+file-version: 1
