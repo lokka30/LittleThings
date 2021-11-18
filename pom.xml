@@ -6,7 +6,7 @@
 
     <groupId>me.lokka30</groupId>
     <artifactId>LittleThings</artifactId>
-    <version>2.2.1</version>
+    <version>2.3.0</version>
 
     <name>LittleThings</name>
     <description>A SpigotMC plugin that adds configurable options to manipulate certain events.</description>
@@ -35,18 +35,18 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.16.4-R0.1-SNAPSHOT</version>
+            <version>1.17.1-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.github.lokka30</groupId>
             <artifactId>MicroLib</artifactId>
-            <version>2.1.1</version>
+            <version>3.1.2</version>
         </dependency>
         <dependency>
             <groupId>org.bstats</groupId>
             <artifactId>bstats-bukkit</artifactId>
-            <version>1.7</version>
+            <version>2.2.1</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>
@@ -60,6 +60,7 @@
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
+                    <optimize>true</optimize>
                 </configuration>
             </plugin>
             <plugin>
@@ -77,6 +78,8 @@
                             <shadedPattern>me.lokka30.littlethings.bstats</shadedPattern>
                         </relocation>
                     </relocations>
+                    <minimizeJar>true</minimizeJar>
+                    <shadedArtifactAttached>false</shadedArtifactAttached>
                 </configuration>
                 <executions>
                     <execution>
@@ -86,6 +89,8 @@
                         </goals>
                         <configuration>
                             <createDependencyReducedPom>false</createDependencyReducedPom>
+                            <minimizeJar>true</minimizeJar>
+                            <shadedArtifactAttached>false</shadedArtifactAttached>
                         </configuration>
                     </execution>
                 </executions>
