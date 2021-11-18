@@ -61,7 +61,7 @@ public class MobSilentModule implements LittleModule {
             if (VersionUtils.isOneNine()) {
                 Bukkit.getPluginManager().registerEvents(new Listeners(), LittleThings.getInstance());
             } else {
-                instance.logger.error("PiglinZombification module is enabled but your server is not MC 1.16+. Please disable the module as it will have no effect on your server.");
+                instance.logger.error("MobSilent module is enabled but your server is not MC 1.9+. Please disable the module as it will have no effect on your server.");
             }
         }
     }
