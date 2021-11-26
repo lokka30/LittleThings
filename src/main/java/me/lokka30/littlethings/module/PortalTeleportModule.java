@@ -1,16 +1,16 @@
-package me.lokka30.littlethings.modules;
+package me.lokka30.littlethings.module;
 
-import me.lokka30.littlethings.LittleModule;
 import me.lokka30.littlethings.LittleThings;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.LeavesDecayEvent;
+import org.bukkit.event.player.PlayerPortalEvent;
 
 import java.io.File;
+import java.util.Objects;
 
-public class LeafDecayModule implements LittleModule {
+public class PortalTeleportModule implements LittleModule {
 
     public boolean isEnabled;
     private LittleThings instance;
@@ -23,7 +23,7 @@ public class LeafDecayModule implements LittleModule {
 
     @Override
     public String getName() {
-        return "LeafDecay";
+        return "PortalTeleport";
     }
 
     @Override
@@ -65,17 +65,22 @@ public class LeafDecayModule implements LittleModule {
 
     private class Listeners implements Listener {
         @EventHandler
-        public void onDecay(final LeavesDecayEvent event) {
-
+        public void onPortalTeleport(final PlayerPortalEvent event) {
             if (!isEnabled) {
                 return;
             }
 
-            if (!instance.isEnabledInList(getName(), moduleConfig, event.getBlock().getWorld().getName(), "worlds")) {
-                instance.debugMessage("LeafDecay: world disabled");
+            if (!instance.isEnabledInList(getName(), moduleConfig, Objects.requireNonNull(event.getFrom().getWorld()).getName(), "worlds")) {
+                return;
+            }
+            if (!instance.isEnabledInList(getName(), moduleConfig, event.getCause().toString(), "portals")) {
+                return;
+            }
+            if (event.getPlayer().hasPermission("littlethings.bypass.stop-portal-teleport")) {
                 return;
             }
 
+            instance.debugMessage("PortalTeleport: stopping teleportation of " + event.getPlayer().getName() + ", cause: " + event.getCause());
             event.setCancelled(true);
         }
     }

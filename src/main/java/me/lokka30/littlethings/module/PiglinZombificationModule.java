@@ -1,6 +1,5 @@
-package me.lokka30.littlethings.modules;
+package me.lokka30.littlethings.module;
 
-import me.lokka30.littlethings.LittleModule;
 import me.lokka30.littlethings.LittleThings;
 import me.lokka30.microlib.other.VersionUtils;
 import org.bukkit.Bukkit;

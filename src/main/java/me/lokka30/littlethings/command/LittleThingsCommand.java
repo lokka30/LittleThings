@@ -1,4 +1,4 @@
-package me.lokka30.littlethings.commands;
+package me.lokka30.littlethings.command;
 
 import me.lokka30.littlethings.LittleThings;
 import me.lokka30.microlib.messaging.MessageUtils;
@@ -11,11 +11,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class LTCommand implements TabExecutor {
+public class LittleThingsCommand implements TabExecutor {
 
     private final LittleThings instance;
 
-    public LTCommand(final LittleThings instance) {
+    public LittleThingsCommand(final LittleThings instance) {
         this.instance = instance;
     }
 

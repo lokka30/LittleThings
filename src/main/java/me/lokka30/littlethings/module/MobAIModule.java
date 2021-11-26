@@ -1,16 +1,17 @@
-package me.lokka30.littlethings.modules;
+package me.lokka30.littlethings.module;
 
-import me.lokka30.littlethings.LittleModule;
 import me.lokka30.littlethings.LittleThings;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockGrowEvent;
+import org.bukkit.event.entity.EntitySpawnEvent;
 
 import java.io.File;
 
-public class PlantGrowthModule implements LittleModule {
+public class MobAIModule implements LittleModule {
 
     public boolean isEnabled;
     private LittleThings instance;
@@ -23,7 +24,7 @@ public class PlantGrowthModule implements LittleModule {
 
     @Override
     public String getName() {
-        return "PlantGrowth";
+        return "MobAI";
     }
 
     @Override
@@ -65,21 +66,29 @@ public class PlantGrowthModule implements LittleModule {
 
     private class Listeners implements Listener {
         @EventHandler
-        public void onGrow(final BlockGrowEvent event) {
-
+        public void onEntitySpawn(final EntitySpawnEvent event) {
             if (!isEnabled) {
                 return;
             }
 
-            if (!instance.isEnabledInList(getName(), moduleConfig, event.getBlock().getType().toString(), "materials")) {
-                return;
-            }
+            Entity entity = event.getEntity();
 
-            if (!instance.isEnabledInList(getName(), moduleConfig, event.getBlock().getWorld().getName(), "worlds")) {
-                return;
-            }
+            if (entity instanceof LivingEntity) {
+                LivingEntity livingEntity = (LivingEntity) entity;
 
-            event.setCancelled(true);
+                if (!instance.isEnabledInList(getName(), moduleConfig, livingEntity.getType().toString(), "entities")) {
+                    instance.debugMessage("MobAI: entity disabled");
+                    return;
+                }
+
+                if (!instance.isEnabledInList(getName(), moduleConfig, livingEntity.getWorld().getName(), "worlds")) {
+                    instance.debugMessage("MobAI: world disabled");
+                    return;
+                }
+
+                instance.debugMessage("MobAI: removing entity's AI");
+                livingEntity.setAI(false);
+            }
         }
     }
 }

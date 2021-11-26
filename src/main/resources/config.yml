@@ -32,8 +32,9 @@ messages:
 # Send debug spam into the console?
 debug: false
 
-# Check for updates on startup? Will warn console once if there is a new version available. (Async too!)
+# Check for updates on startup? Will warn console once if there is a new version available.
+# It is recommended that you leave this enabled (true).
 check-for-updates: true
 
-# Do not change this unless you know what you are doing.
+# Do not touch this. It's used internally.
 file-version: 7

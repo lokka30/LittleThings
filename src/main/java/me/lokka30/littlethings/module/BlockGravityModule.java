@@ -1,17 +1,17 @@
-package me.lokka30.littlethings.modules;
+package me.lokka30.littlethings.module;
 
-import me.lokka30.littlethings.LittleModule;
 import me.lokka30.littlethings.LittleThings;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.FallingBlock;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockFromToEvent;
+import org.bukkit.event.entity.EntityChangeBlockEvent;
 
 import java.io.File;
 
-public class DragonEggBreakModule implements LittleModule {
+public class BlockGravityModule implements LittleModule {
 
     public boolean isEnabled;
     private LittleThings instance;
@@ -24,7 +24,7 @@ public class DragonEggBreakModule implements LittleModule {
 
     @Override
     public String getName() {
-        return "DragonEggBreak";
+        return "BlockGravity";
     }
 
     @Override
@@ -66,20 +66,25 @@ public class DragonEggBreakModule implements LittleModule {
 
     private class Listeners implements Listener {
         @EventHandler
-        public void onBlockTeleport(final BlockFromToEvent event) {
+        public void onChangeBlock(final EntityChangeBlockEvent event) {
+            final Entity entity = event.getEntity();
 
             if (!isEnabled) {
                 return;
             }
-
-            if (event.getBlock().getType() != Material.DRAGON_EGG) return;
-
-            if (!instance.isEnabledInList(getName(), moduleConfig, event.getBlock().getWorld().getName(), "worlds")) {
-                instance.debugMessage("LeafDecay: world disabled");
+            if (!(entity instanceof FallingBlock)) {
+                return;
+            }
+            if (!instance.isEnabledInList(getName(), moduleConfig, event.getBlock().getType().toString(), "materials")) {
+                return;
+            }
+            if (!instance.isEnabledInList(getName(), moduleConfig, entity.getWorld().getName(), "worlds")) {
                 return;
             }
 
+            instance.debugMessage("BlockGravity: Cancelling");
             event.setCancelled(true);
+            event.getBlock().getState().update();
         }
     }
 }

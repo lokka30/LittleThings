@@ -1,18 +1,16 @@
-package me.lokka30.littlethings.modules;
+package me.lokka30.littlethings.module;
 
-import me.lokka30.littlethings.LittleModule;
 import me.lokka30.littlethings.LittleThings;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.ZombieVillager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.block.BlockFromToEvent;
 
 import java.io.File;
 
-public class IronGolemZombieVillagerModule implements LittleModule {
+public class DragonEggBreakModule implements LittleModule {
 
     public boolean isEnabled;
     private LittleThings instance;
@@ -25,7 +23,7 @@ public class IronGolemZombieVillagerModule implements LittleModule {
 
     @Override
     public String getName() {
-        return "IronGolemZombieVillager";
+        return "DragonEggBreak";
     }
 
     @Override
@@ -67,36 +65,20 @@ public class IronGolemZombieVillagerModule implements LittleModule {
 
     private class Listeners implements Listener {
         @EventHandler
-        public void onDamage(final EntityDamageByEntityEvent event) {
+        public void onBlockTeleport(final BlockFromToEvent event) {
+
             if (!isEnabled) {
                 return;
             }
 
-            // Check if defender is a zombie villager.
-            if (event.getEntity().getType() != EntityType.ZOMBIE_VILLAGER) {
+            if (event.getBlock().getType() != Material.DRAGON_EGG) return;
+
+            if (!instance.isEnabledInList(getName(), moduleConfig, event.getBlock().getWorld().getName(), "worlds")) {
+                instance.debugMessage("LeafDecay: world disabled");
                 return;
             }
 
-            // Check if attacker is an iron golem.
-            if (event.getDamager().getType() != EntityType.IRON_GOLEM) {
-                return;
-            }
-
-            // Make sure that the world is enabled in the module config.
-            if (!instance.isEnabledInList(getName(), moduleConfig, event.getEntity().getWorld().getName(), "worlds")) {
-                instance.debugMessage("IronGolemZombieVillager: world disabled");
-                return;
-            }
-
-            ZombieVillager zombieVillager = (ZombieVillager) event.getEntity();
-
-            if (moduleConfig.getBoolean("mustBeConverting")) {
-                if (zombieVillager.isConverting()) {
-                    event.setCancelled(true);
-                }
-            } else {
-                event.setCancelled(true);
-            }
+            event.setCancelled(true);
         }
     }
 }

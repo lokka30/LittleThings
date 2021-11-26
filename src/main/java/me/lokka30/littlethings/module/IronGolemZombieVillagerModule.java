@@ -1,17 +1,17 @@
-package me.lokka30.littlethings.modules;
+package me.lokka30.littlethings.module;
 
-import me.lokka30.littlethings.LittleModule;
 import me.lokka30.littlethings.LittleThings;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.ZombieVillager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerPortalEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 import java.io.File;
-import java.util.Objects;
 
-public class PortalTeleportModule implements LittleModule {
+public class IronGolemZombieVillagerModule implements LittleModule {
 
     public boolean isEnabled;
     private LittleThings instance;
@@ -24,7 +24,7 @@ public class PortalTeleportModule implements LittleModule {
 
     @Override
     public String getName() {
-        return "PortalTeleport";
+        return "IronGolemZombieVillager";
     }
 
     @Override
@@ -66,23 +66,36 @@ public class PortalTeleportModule implements LittleModule {
 
     private class Listeners implements Listener {
         @EventHandler
-        public void onPortalTeleport(final PlayerPortalEvent event) {
+        public void onDamage(final EntityDamageByEntityEvent event) {
             if (!isEnabled) {
                 return;
             }
 
-            if (!instance.isEnabledInList(getName(), moduleConfig, Objects.requireNonNull(event.getFrom().getWorld()).getName(), "worlds")) {
-                return;
-            }
-            if (!instance.isEnabledInList(getName(), moduleConfig, event.getCause().toString(), "portals")) {
-                return;
-            }
-            if (event.getPlayer().hasPermission("littlethings.bypass.stop-portal-teleport")) {
+            // Check if defender is a zombie villager.
+            if (event.getEntity().getType() != EntityType.ZOMBIE_VILLAGER) {
                 return;
             }
 
-            instance.debugMessage("PortalTeleport: stopping teleportation of " + event.getPlayer().getName() + ", cause: " + event.getCause().toString());
-            event.setCancelled(true);
+            // Check if attacker is an iron golem.
+            if (event.getDamager().getType() != EntityType.IRON_GOLEM) {
+                return;
+            }
+
+            // Make sure that the world is enabled in the module config.
+            if (!instance.isEnabledInList(getName(), moduleConfig, event.getEntity().getWorld().getName(), "worlds")) {
+                instance.debugMessage("IronGolemZombieVillager: world disabled");
+                return;
+            }
+
+            ZombieVillager zombieVillager = (ZombieVillager) event.getEntity();
+
+            if (moduleConfig.getBoolean("mustBeConverting")) {
+                if (zombieVillager.isConverting()) {
+                    event.setCancelled(true);
+                }
+            } else {
+                event.setCancelled(true);
+            }
         }
     }
 }

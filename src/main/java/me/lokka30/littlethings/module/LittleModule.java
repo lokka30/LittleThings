@@ -1,4 +1,4 @@
-package me.lokka30.littlethings;
+package me.lokka30.littlethings.module;
 
 public interface LittleModule {
 

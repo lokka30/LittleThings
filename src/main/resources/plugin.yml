@@ -24,6 +24,7 @@ permissions:
   littlethings.command:
     default: true
     description: 'Allows players to run the ''/littlethings'' command.'
+
   littlethinds.reload:
     default: op
     description: 'Ability to reload the configuration using the ''/littlethings reload'' command.'

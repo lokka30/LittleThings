@@ -1,18 +1,15 @@
-package me.lokka30.littlethings.modules;
+package me.lokka30.littlethings.module;
 
-import me.lokka30.littlethings.LittleModule;
 import me.lokka30.littlethings.LittleThings;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntitySpawnEvent;
+import org.bukkit.event.entity.EntityExplodeEvent;
 
 import java.io.File;
 
-public class MobAIModule implements LittleModule {
+public class ExplosionBlockDamageModule implements LittleModule {
 
     public boolean isEnabled;
     private LittleThings instance;
@@ -25,7 +22,7 @@ public class MobAIModule implements LittleModule {
 
     @Override
     public String getName() {
-        return "MobAI";
+        return "ExplosionBlockDamage";
     }
 
     @Override
@@ -67,29 +64,19 @@ public class MobAIModule implements LittleModule {
 
     private class Listeners implements Listener {
         @EventHandler
-        public void onEntitySpawn(final EntitySpawnEvent event) {
+        public void onExplode(final EntityExplodeEvent event) {
+
             if (!isEnabled) {
                 return;
             }
 
-            Entity entity = event.getEntity();
-
-            if (entity instanceof LivingEntity) {
-                LivingEntity livingEntity = (LivingEntity) entity;
-
-                if (!instance.isEnabledInList(getName(), moduleConfig, livingEntity.getType().toString(), "entities")) {
-                    instance.debugMessage("MobAI: entity disabled");
-                    return;
-                }
-
-                if (!instance.isEnabledInList(getName(), moduleConfig, livingEntity.getWorld().getName(), "worlds")) {
-                    instance.debugMessage("MobAI: world disabled");
-                    return;
-                }
-
-                instance.debugMessage("MobAI: removing entity's AI");
-                livingEntity.setAI(false);
+            if (!instance.isEnabledInList(getName(), moduleConfig, event.getEntity().getWorld().getName(), "worlds")) {
+                instance.debugMessage("ExplosionBlockDamage: world not enabled");
+                return;
             }
+
+            instance.debugMessage("ExplosionBlockDamage: clearing block list");
+            event.blockList().clear();
         }
     }
 }

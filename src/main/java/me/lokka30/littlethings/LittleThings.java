@@ -1,7 +1,7 @@
 package me.lokka30.littlethings;
 
-import me.lokka30.littlethings.commands.LTCommand;
-import me.lokka30.littlethings.modules.*;
+import me.lokka30.littlethings.command.LittleThingsCommand;
+import me.lokka30.littlethings.module.*;
 import me.lokka30.microlib.exceptions.OutdatedServerVersionException;
 import me.lokka30.microlib.maths.QuickTimer;
 import me.lokka30.microlib.messaging.MicroLogger;
@@ -127,9 +127,9 @@ public class LittleThings extends JavaPlugin {
     }
 
     public void debugMessage(String message) {
-        if (getConfig().contains("debug") && getConfig().getBoolean("debug")) {
-            logger.info("&8[DEBUG] &7" + message);
-        }
+        if (!getConfig().getBoolean("debug", false)) { return; }
+
+        logger.info("&8[DEBUG] &7" + message);
     }
 
     private void loadFiles() {
@@ -146,7 +146,7 @@ public class LittleThings extends JavaPlugin {
 
     private void registerCommands() {
         logger.info("Registering commands...");
-        Objects.requireNonNull(getCommand("littlethings")).setExecutor(new LTCommand(this));
+        Objects.requireNonNull(getCommand("littlethings")).setExecutor(new LittleThingsCommand(this));
     }
 
     private void startMetrics() {

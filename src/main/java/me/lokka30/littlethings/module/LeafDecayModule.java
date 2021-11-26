@@ -1,16 +1,15 @@
-package me.lokka30.littlethings.modules;
+package me.lokka30.littlethings.module;
 
-import me.lokka30.littlethings.LittleModule;
 import me.lokka30.littlethings.LittleThings;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityExplodeEvent;
+import org.bukkit.event.block.LeavesDecayEvent;
 
 import java.io.File;
 
-public class ExplosionBlockDamageModule implements LittleModule {
+public class LeafDecayModule implements LittleModule {
 
     public boolean isEnabled;
     private LittleThings instance;
@@ -23,7 +22,7 @@ public class ExplosionBlockDamageModule implements LittleModule {
 
     @Override
     public String getName() {
-        return "ExplosionBlockDamage";
+        return "LeafDecay";
     }
 
     @Override
@@ -65,19 +64,18 @@ public class ExplosionBlockDamageModule implements LittleModule {
 
     private class Listeners implements Listener {
         @EventHandler
-        public void onExplode(final EntityExplodeEvent event) {
+        public void onDecay(final LeavesDecayEvent event) {
 
             if (!isEnabled) {
                 return;
             }
 
-            if (!instance.isEnabledInList(getName(), moduleConfig, event.getEntity().getWorld().getName(), "worlds")) {
-                instance.debugMessage("ExplosionBlockDamage: world not enabled");
+            if (!instance.isEnabledInList(getName(), moduleConfig, event.getBlock().getWorld().getName(), "worlds")) {
+                instance.debugMessage("LeafDecay: world disabled");
                 return;
             }
 
-            instance.debugMessage("ExplosionBlockDamage: clearing block list");
-            event.blockList().clear();
+            event.setCancelled(true);
         }
     }
 }

@@ -1,22 +1,19 @@
-package me.lokka30.littlethings.modules;
+package me.lokka30.littlethings.module;
 
-import me.lokka30.littlethings.LittleModule;
 import me.lokka30.littlethings.LittleThings;
-import me.lokka30.microlib.other.VersionUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntitySpawnEvent;
 
 import java.io.File;
 
-/**
- * @author ProfliX, lokka30
- */
-public class MobSilentModule implements LittleModule {
+public class ArmorStandsModule implements LittleModule {
+
     public boolean isEnabled;
     private LittleThings instance;
     private YamlConfiguration moduleConfig;
@@ -28,7 +25,7 @@ public class MobSilentModule implements LittleModule {
 
     @Override
     public String getName() {
-        return "MobSilent";
+        return "ArmorStands";
     }
 
     @Override
@@ -60,13 +57,7 @@ public class MobSilentModule implements LittleModule {
     public void loadModule() {
         instance = LittleThings.getInstance();
         loadConfig();
-        if (isEnabled) {
-            if (VersionUtils.isOneNine()) {
-                Bukkit.getPluginManager().registerEvents(new Listeners(), LittleThings.getInstance());
-            } else {
-                instance.logger.error("The &bMobSilent&7 module is enabled but your server is not &bMC 1.9+&7. Please disable the module as it will have no effect on your server.");
-            }
-        }
+        Bukkit.getPluginManager().registerEvents(new Listeners(), LittleThings.getInstance());
     }
 
     @Override
@@ -77,27 +68,15 @@ public class MobSilentModule implements LittleModule {
     private class Listeners implements Listener {
         @EventHandler
         public void onEntitySpawn(final EntitySpawnEvent event) {
-            if (!isEnabled) {
-                return;
-            }
+            if (isEnabled) {
+                Entity entity = event.getEntity();
 
-            Entity entity = event.getEntity();
-
-            if (entity instanceof LivingEntity) {
-                LivingEntity livingEntity = (LivingEntity) entity;
-
-                if (!instance.isEnabledInList(getName(), moduleConfig, livingEntity.getType().toString(), "entities")) {
-                    instance.debugMessage("MobSilent: entity silenced");
-                    return;
+                if (entity.getType() == EntityType.ARMOR_STAND && instance.isEnabledInList(getName(), moduleConfig, entity.getWorld().getName(), "worlds")) {
+                    ArmorStand armorStand = (ArmorStand) entity;
+                    armorStand.setArms(moduleConfig.getBoolean("modifications.arms"));
+                    armorStand.setBasePlate(moduleConfig.getBoolean("modifications.base-plate"));
+                    instance.debugMessage("ArmorStands: Modified");
                 }
-
-                if (!instance.isEnabledInList(getName(), moduleConfig, livingEntity.getWorld().getName(), "worlds")) {
-                    instance.debugMessage("MobSilent: world disabled");
-                    return;
-                }
-
-                instance.debugMessage("MobSilent: removing entity's sound");
-                livingEntity.setSilent(true);
             }
         }
     }
