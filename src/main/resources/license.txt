@@ -1,5 +1,5 @@
 LittleThings: A SpigotMC plugin that adds configurable options to manipulate certain events.
-Copyright (C) 2020  Lachlan Adamson
+Copyright (C) 2020-2021 lokka30
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU Affero General Public License as

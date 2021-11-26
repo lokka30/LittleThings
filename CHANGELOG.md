@@ -1,4 +1,16 @@
-# LittleThings Changelog
+# LittleThings Release Changelog
+
+Sorted in **descending** order.
+
+## v2.3.0
+* [ProfliX](https://github.com/ProfliX) added a new module: `MobSilent`!
+  * This allows you to set which mobs should be permanently silent when they spawn in after the module is configured.
+  * This module only runs on MC 1.9+, older versions don't have the required code to run it.
+* [ProfliX](https://github.com/ProfliX) and I have made various improvements to the code - this plugin laid dormant whilst my programming ability improved since the previous update.
+
+# Old LittleThings Changelog
+
+Sorted in **ascending** order.
 
 ## v1.0.0-ALPHA
 * Initial Version
@@ -161,6 +173,3 @@
 ### Changelog:
 **Bug Fix**
 * Fixed armor stands module checking the wrong config. Arms and base plate settings will work now :)
-
-***
-
