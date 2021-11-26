@@ -9,6 +9,7 @@ import me.lokka30.microlib.other.UpdateChecker;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.Arrays;
@@ -48,7 +49,6 @@ public class LittleThings extends JavaPlugin {
         instance = this;
         final QuickTimer timer = new QuickTimer();
         timer.start();
-        logger.info("&f~ Plugin starting up ~");
 
         loadFiles();
         loadModules();
@@ -56,12 +56,7 @@ public class LittleThings extends JavaPlugin {
 
         logger.info("Running misc methods...");
         startMetrics();
-        saveLicense();
-        try {
-            checkForUpdates();
-        } catch (OutdatedServerVersionException e) {
-            e.printStackTrace();
-        }
+        checkForUpdates();
 
         logger.info("&f~ Plugin enabled successfully, took &b" + timer.getTimer() + "ms&f ~");
     }
@@ -74,35 +69,42 @@ public class LittleThings extends JavaPlugin {
     private void loadModules() {
         logger.info("Loading modules...");
         modules.forEach(module -> {
+
             module.loadModule();
+
+            // run module version check
             if (module.isEnabled() && (module.getInstalledConfigVersion() != module.getLatestConfigVersion())) {
-                instance.logger.error("Module &b" + module.getName() + "&7's config has a mismatched version (outdated?). Please replace it as soon as possible else errors are highly likely to occur.");
+                instance.logger.error("Module &b" + module.getName() + "&7's config has a mismatched version (outdated?). Please replace it as soon as possible, or else, errors are highly likely to occur.");
             }
+
             logger.info("Loaded module &b" + module.getName() + "&7 with status &b" + (module.isEnabled() ? "enabled" : "disabled") + "&7.");
         });
     }
 
     public void reloadModules() {
-        logger.info("Reloading modules...");
+        logger.info("Re-loading modules...");
         modules.forEach(module -> {
             module.reloadModule();
             if (module.getInstalledConfigVersion() != module.getLatestConfigVersion()) {
-                logger.error("Module &b" + module.getName() + "&7's config has a mismatched version (outdated?). Please replace it as soon as possible else errors are highly likely to occur.");
+                logger.error("Module &b" + module.getName() + "&7's config has a mismatched version (outdated?). Please replace it as soon as possible, or else, errors are highly likely to occur.");
                 debugMessage("MismatchedVersion: (Installed) v" + module.getInstalledConfigVersion() + " != (Latest) v" + module.getLatestConfigVersion() + ".");
             }
-            logger.info("Reloaded module &b" + module.getName() + "&7 with status &b" + (module.isEnabled() ? "enabled" : "disabled") + "&7.");
+
+            logger.info("Re-loaded module &b" + module.getName() + "&7 with status &b" + (module.isEnabled() ? "enabled" : "disabled") + "&7.");
         });
     }
 
+    @NotNull
     public String getModulesFolderPath() {
         return getDataFolder() + File.separator + "modules" + File.separator;
     }
 
-    public File getModuleConfigFile(String moduleName) {
+    @NotNull
+    public File getModuleConfigFile(@NotNull final String moduleName) {
         return new File(getModulesFolderPath() + moduleName + ".yml");
     }
 
-    public void saveModuleConfigFile(String moduleName) {
+    public void saveModuleConfigFile(@NotNull final String moduleName) {
         saveResource("modules" + File.separator + moduleName + ".yml", false);
     }
 
@@ -132,10 +134,14 @@ public class LittleThings extends JavaPlugin {
 
     private void loadFiles() {
         logger.info("Loading files...");
+
         saveDefaultConfig();
+
         if (getConfig().getInt("file-version") != 7) {
             logger.error("File version mismatch for config.yml, reset / update the config file as soon as possible.");
         }
+
+        saveResource("license.txt", true);
     }
 
     private void registerCommands() {
@@ -147,21 +153,22 @@ public class LittleThings extends JavaPlugin {
         new Metrics(this, 8934);
     }
 
-    private void saveLicense() {
-        saveResource("license.txt", true);
-    }
-
-    private void checkForUpdates() throws OutdatedServerVersionException {
+    private void checkForUpdates() {
         if (!getConfig().getBoolean("check-for-updates")) {
             return;
         }
 
         UpdateChecker updateChecker = new UpdateChecker(this, 84163);
         String currentVersion = updateChecker.getCurrentVersion();
-        updateChecker.getLatestVersion(latestVersion -> {
-            if (!currentVersion.equals(latestVersion)) {
-                logger.warning("An update is available on the SpigotMC resource page. You are running &bv" + currentVersion + "&7, new version is &bv" + latestVersion + "&7.");
-            }
-        });
+
+        try {
+            updateChecker.getLatestVersion(latestVersion -> {
+                if (!currentVersion.equals(latestVersion)) {
+                    logger.warning("An update is available on the SpigotMC resource page. You are running &bv" + currentVersion + "&7, new version is &bv" + latestVersion + "&7.");
+                }
+            });
+        } catch(OutdatedServerVersionException ex) {
+            ex.printStackTrace();
+        }
     }
 }

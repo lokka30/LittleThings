@@ -63,7 +63,7 @@ public class PiglinZombificationModule implements LittleModule {
             if (VersionUtils.isOneSixteen()) {
                 Bukkit.getPluginManager().registerEvents(new Listeners(), LittleThings.getInstance());
             } else {
-                instance.logger.error("PiglinZombification module is enabled but your server is not MC 1.16+. Please disable the module as it will have no effect on your server.");
+                instance.logger.error("The &bPiglinZombification&7 module is enabled but your server is not &bMC 1.16+&7. Please disable the module as it will have no effect on your server.");
             }
         }
     }

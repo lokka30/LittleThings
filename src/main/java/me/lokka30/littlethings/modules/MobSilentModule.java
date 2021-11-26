@@ -13,6 +13,9 @@ import org.bukkit.event.entity.EntitySpawnEvent;
 
 import java.io.File;
 
+/**
+ * @author ProfliX, lokka30
+ */
 public class MobSilentModule implements LittleModule {
     public boolean isEnabled;
     private LittleThings instance;
@@ -61,7 +64,7 @@ public class MobSilentModule implements LittleModule {
             if (VersionUtils.isOneNine()) {
                 Bukkit.getPluginManager().registerEvents(new Listeners(), LittleThings.getInstance());
             } else {
-                instance.logger.error("MobSilent module is enabled but your server is not MC 1.9+. Please disable the module as it will have no effect on your server.");
+                instance.logger.error("The &bMobSilent&7 module is enabled but your server is not &bMC 1.9+&7. Please disable the module as it will have no effect on your server.");
             }
         }
     }
