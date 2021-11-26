@@ -2,9 +2,10 @@ package me.lokka30.littlethings;
 
 import me.lokka30.littlethings.commands.LTCommand;
 import me.lokka30.littlethings.modules.*;
-import me.lokka30.microlib.MicroLogger;
-import me.lokka30.microlib.QuickTimer;
-import me.lokka30.microlib.UpdateChecker;
+import me.lokka30.microlib.exceptions.OutdatedServerVersionException;
+import me.lokka30.microlib.maths.QuickTimer;
+import me.lokka30.microlib.messaging.MicroLogger;
+import me.lokka30.microlib.other.UpdateChecker;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -20,6 +21,7 @@ public class LittleThings extends JavaPlugin {
 
     private static LittleThings instance;
     public final MicroLogger logger = new MicroLogger("&b&lLittleThings: &7");
+
     private final List<LittleModule> modules = Arrays.asList(
             new ArmorStandsModule(),
             new BlockGravityModule(),
@@ -31,6 +33,7 @@ public class LittleThings extends JavaPlugin {
             new IronGolemZombieVillagerModule(),
             new LeafDecayModule(),
             new MobAIModule(),
+            new MobSilentModule(),
             new PiglinZombificationModule(),
             new PlantGrowthModule(),
             new PortalTeleportModule()
@@ -54,7 +57,11 @@ public class LittleThings extends JavaPlugin {
         logger.info("Running misc methods...");
         startMetrics();
         saveLicense();
-        checkForUpdates();
+        try {
+            checkForUpdates();
+        } catch (OutdatedServerVersionException e) {
+            e.printStackTrace();
+        }
 
         logger.info("&f~ Plugin enabled successfully, took &b" + timer.getTimer() + "ms&f ~");
     }
@@ -117,15 +124,6 @@ public class LittleThings extends JavaPlugin {
         }
     }
 
-    public boolean isOneSixteen() {
-        try {
-            Class.forName("org.bukkit.entity.PiglinAbstract");
-        } catch (ClassNotFoundException e) {
-            return false;
-        }
-        return true;
-    }
-
     public void debugMessage(String message) {
         if (getConfig().contains("debug") && getConfig().getBoolean("debug")) {
             logger.info("&8[DEBUG] &7" + message);
@@ -153,7 +151,7 @@ public class LittleThings extends JavaPlugin {
         saveResource("license.txt", true);
     }
 
-    private void checkForUpdates() {
+    private void checkForUpdates() throws OutdatedServerVersionException {
         if (!getConfig().getBoolean("check-for-updates")) {
             return;
         }

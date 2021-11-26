@@ -1,10 +1,11 @@
 package me.lokka30.littlethings.commands;
 
 import me.lokka30.littlethings.LittleThings;
-import me.lokka30.microlib.MicroUtils;
+import me.lokka30.microlib.messaging.MessageUtils;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,13 +19,13 @@ public class LTCommand implements TabExecutor {
         this.instance = instance;
     }
 
-    private List<String> getColoredListFromConfig(String path) {
+    private @NotNull List<String> getColoredListFromConfig(String path) {
         List<String> messages = new ArrayList<>();
 
         for (String message : instance.getConfig().getStringList(path)) {
             message = message.replace("%prefix%",
                     Objects.requireNonNull(instance.getConfig().getString("messages.prefix")));
-            message = MicroUtils.colorize(message);
+            message = MessageUtils.colorizeAll(message);
 
             messages.add(message);
         }
@@ -33,7 +34,7 @@ public class LTCommand implements TabExecutor {
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+    public boolean onCommand(CommandSender sender, @NotNull Command cmd, @NotNull String label, String[] args) {
         if (sender.hasPermission("littlethings.command")) {
             if (args.length == 0) {
                 getColoredListFromConfig("messages.main").forEach(message -> {
@@ -61,7 +62,7 @@ public class LTCommand implements TabExecutor {
     }
 
     @Override
-    public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String[] args) {
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, String @NotNull [] args) {
         List<String> suggestions = new ArrayList<>();
 
         if (args.length == 0) {

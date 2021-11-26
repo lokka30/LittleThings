@@ -6,16 +6,14 @@ import me.lokka30.microlib.other.VersionUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.PiglinAbstract;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntitySpawnEvent;
 
 import java.io.File;
-import java.util.Objects;
 
-public class PiglinZombificationModule implements LittleModule {
-
+public class MobSilentModule implements LittleModule {
     public boolean isEnabled;
     private LittleThings instance;
     private YamlConfiguration moduleConfig;
@@ -27,7 +25,7 @@ public class PiglinZombificationModule implements LittleModule {
 
     @Override
     public String getName() {
-        return "PiglinZombification";
+        return "MobSilent";
     }
 
     @Override
@@ -60,10 +58,10 @@ public class PiglinZombificationModule implements LittleModule {
         instance = LittleThings.getInstance();
         loadConfig();
         if (isEnabled) {
-            if (VersionUtils.isOneSixteen()) {
+            if (VersionUtils.isOneNine()) {
                 Bukkit.getPluginManager().registerEvents(new Listeners(), LittleThings.getInstance());
             } else {
-                instance.logger.error("PiglinZombification module is enabled but your server is not MC 1.16+. Please disable the module as it will have no effect on your server.");
+                instance.logger.error("MobSilent module is enabled but your server is not MC 1.9+. Please disable the module as it will have no effect on your server.");
             }
         }
     }
@@ -76,24 +74,27 @@ public class PiglinZombificationModule implements LittleModule {
     private class Listeners implements Listener {
         @EventHandler
         public void onEntitySpawn(final EntitySpawnEvent event) {
-
             if (!isEnabled) {
                 return;
             }
 
             Entity entity = event.getEntity();
 
-            if (entity instanceof PiglinAbstract) {
-                instance.debugMessage("PiglinZombification: Entity '" + event.getEntityType() + "' instanceof PiglinAbstract");
+            if (entity instanceof LivingEntity) {
+                LivingEntity livingEntity = (LivingEntity) entity;
 
-                final PiglinAbstract piglinAbstract = (PiglinAbstract) event.getEntity();
-                final boolean shouldBeImmune = instance.isEnabledInList(getName(), moduleConfig, Objects.requireNonNull(entity.getWorld()).getName(), "worlds");
-
-                if (shouldBeImmune) {
-                    piglinAbstract.setImmuneToZombification(true);
+                if (!instance.isEnabledInList(getName(), moduleConfig, livingEntity.getType().toString(), "entities")) {
+                    instance.debugMessage("MobSilent: entity silenced");
+                    return;
                 }
 
-                instance.debugMessage("PiglinZombification: Is immune to zombification: " + shouldBeImmune);
+                if (!instance.isEnabledInList(getName(), moduleConfig, livingEntity.getWorld().getName(), "worlds")) {
+                    instance.debugMessage("MobSilent: world disabled");
+                    return;
+                }
+
+                instance.debugMessage("MobSilent: removing entity's sound");
+                livingEntity.setSilent(true);
             }
         }
     }
