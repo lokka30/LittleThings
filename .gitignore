@@ -1,2 +1,3 @@
-/target/
-/.idea/workspace.xml
+target
+.idea
+LittleThings.iml
